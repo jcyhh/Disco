@@ -1,0 +1,86 @@
+.asset-page {
+    color: var(--app-content-text-color);
+
+    &__overview {
+        padding: calc(30px - 2px);
+        border: 2px solid var(--app-card-bg);
+        background: var(--app-card-bg) url('@/assets/asset/overview-background.webp') center / cover no-repeat;
+    }
+
+    &__balance-row {
+        grid-template-columns: 112px minmax(0, 1fr);
+    }
+
+    &__token {
+        position: relative;
+        width: 112px;
+        height: 112px;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            top: -2.47%;
+            left: -3.36%;
+            width: 107.32%;
+            height: 107.32%;
+            max-width: none;
+        }
+    }
+
+    &__balance-details,
+    &__balance-copy,
+    &__record-note {
+        min-width: 0;
+    }
+
+    &__withdraw {
+        @include auto-button($height: 60px);
+
+        border: 1px solid var(--app-card-bg);
+        flex-shrink: 0;
+    }
+
+    &__record {
+        grid-template-columns: 72px minmax(0, 1fr) max-content;
+        min-height: 141px;
+        box-shadow: var(--app-content-shadow);
+    }
+
+    &__record-icon {
+        position: relative;
+        width: 72px;
+        height: 72px;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            max-width: none;
+        }
+
+        &--income img {
+            top: -7.89%;
+            left: -11.61%;
+            width: 118.23%;
+            height: 118.23%;
+        }
+
+        &--expense img {
+            top: -6.25%;
+            left: -11.12%;
+            width: 112.5%;
+            height: 112.5%;
+        }
+    }
+
+    &__muted {
+        color: var(--app-content-muted-color);
+    }
+
+    &__amount--income {
+        color: var(--app-content-positive-color);
+    }
+
+    &__amount--expense {
+        color: var(--app-color);
+    }
+}

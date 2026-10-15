@@ -1,0 +1,24 @@
+.splash-page {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: hidden;
+
+    &__brand {
+        position: fixed;
+        inset: 0;
+    }
+
+    &__logo {
+        width: 320px;
+        height: 320px;
+        object-fit: contain;
+    }
+
+    &__tips {
+        position: fixed;
+        bottom: 30px;
+        left: 0;
+        color: var(--app-secondary-text-color);
+    }
+}

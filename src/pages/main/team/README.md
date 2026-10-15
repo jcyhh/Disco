@@ -1,0 +1,29 @@
+# 我的团队静态页面
+
+参考 [Figma 节点 31055:4493](https://www.figma.com/design/NVwAAv12WZx1LiCTqPMNWD?node-id=31055-4493)。页面包括邀请链接、三项人数统计、团队与个人业绩、三条直推成员记录；视觉和交互验收由开发者负责。
+
+## 数据与交互
+
+`src/mock/team.ts` 保存展示值：团队人数 `1,682`、直推人数 `864`、有效直推 `712`，团队与个人业绩均为 `10,000`；三条成员记录沿用设计中的账号、时间及 `12,800.00` / `1,200.00` 业绩。
+
+邀请链接使用 `@/mock/referral.ts` 的 `getMockReferralLink()`，与邀请页共用邀请码 `DBK6P8`，包含当前站点和部署前缀；不使用设计中的示意地址。复制按钮调用 `copyTextToClipboard()` 复制完整真实链接，使用共享 `message` 显示结果，展示区域仅作省略，不截断复制内容。
+
+所有可见标签调用 `t()`，数字和成员资料保留 mock 展示字符串。页面不发起 API/RPC、钱包操作或上传，不注册虚假刷新，不扩展设计之外的业务操作。
+
+## 资源与比例
+
+十张业务图片由 Figma 下载到 `src/assets/team/`，保留完整画面与透明度，以 q90/m6/alpha100 编码为 WebP；总大小从 12,151,829 bytes 降为 362,492 bytes，减少约 97.02%。Hero 保留至少 2x 设计分辨率，其余图片按实际裁剪区域保留足够清晰度。
+
+| 本地资源 | 750 设计稿中的显示区域 |
+| --- | --- |
+| `hero-banner.webp` | `BusinessPageHero` 的 690×240 背景，`cover` |
+| `referral-link.webp` | 88×88 裁剪区；图宽 123.29%、高 110.1%，偏移 -14.76% / -6.02% |
+| `copy.webp` | 28×28 裁剪区；图宽 163.04%、高 148.76%，偏移 -32.61% / -24.03% |
+| `team-count.webp` | 86×86 裁剪区；图宽 140%、高 100%，水平偏移 -20% |
+| `direct-count.webp` | 86×86 裁剪区；图宽 113.5%、高 94.58%，偏移 -6.52% / 2.48% |
+| `effective-direct.webp` | 86×86 裁剪区；图宽 157.58%、高 105.06%，偏移 -29.29% / -2.4% |
+| `team-performance.webp`、`personal-performance.webp` | 86×86，`cover` |
+| `member-team-performance.webp` | 60×60 裁剪区；图宽 107.59%、高 90.44%，偏移 -4.64% / 4.22% |
+| `member-personal-performance.webp` | 60×60，`cover` |
+
+顶部复用 `BusinessPageHero` 及其原始 435×240 SVG 叠层；章节星使用公共 `section-star.png`，不重复下载固定 Header、品牌或语言控件资源。公共卡片、主题 token 和已固定 UI 保持原样；页内装饰渐变及图像裁剪由 `TeamPage.scss` 负责。

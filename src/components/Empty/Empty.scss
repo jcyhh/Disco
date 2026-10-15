@@ -1,0 +1,12 @@
+.empty {
+    width: 100%;
+
+    &__image {
+        width: 204px;
+        height: auto;
+    }
+
+    &__text {
+        color: var(--app-secondary-text-color);
+    }
+}

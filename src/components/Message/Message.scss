@@ -1,0 +1,33 @@
+.message-toast-root {
+    position: fixed;
+    z-index: 10000000;
+    right: 0;
+    bottom: calc(env(safe-area-inset-bottom) + 30px);
+    left: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.message-toast {
+    width: 690px;
+    max-width: calc(100vw - 60px);
+    max-width: calc(100dvw - 60px);
+    color: inherit;
+    background: var(--app-card-bg);
+    border: 1px solid var(--app-border-color);
+    border-radius: 16px;
+    pointer-events: auto;
+
+    &--success { border-color: var(--app-green); }
+    &--info { border-color: var(--app-blue); }
+    &--fail { border-color: var(--app-red); }
+    &--warning { border-color: var(--app-yellow); }
+
+    &__close {
+        border: 0;
+        color: inherit;
+        background: transparent;
+        cursor: pointer;
+    }
+}

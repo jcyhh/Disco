@@ -1,0 +1,9 @@
+.carousel {
+    &__card {
+        width: 100%;
+    }
+
+    &--vertical &__card {
+        height: 100%;
+    }
+}

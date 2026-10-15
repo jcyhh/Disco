@@ -1,0 +1,89 @@
+.segmented-tabs {
+    position: relative;
+    width: 100%;
+    height: 84px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--app-segmented-tabs-bg, var(--app-box-bg));
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+
+    &__indicator {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        z-index: 0;
+        height: 68px;
+        border-radius: 999px;
+        background: var(--app-segmented-tabs-active-bg, var(--app-color));
+        pointer-events: none;
+        transition: left 0.3s;
+    }
+
+    &__tab {
+        position: relative;
+        z-index: 1;
+        flex: 1;
+        height: 68px;
+        border: 0;
+        border-radius: 999px;
+        color: var(--app-segmented-tabs-active-color, var(--app-btn-color));
+        background: transparent;
+        cursor: pointer;
+        transition: color 0.3s;
+
+        &:disabled {
+            cursor: not-allowed;
+        }
+    }
+
+    &__tab--inactive {
+        color: var(--app-segmented-tabs-inactive-color, inherit);
+    }
+
+    @for $count from 1 through 5 {
+        &--count-#{$count} {
+            .segmented-tabs__indicator {
+                width: calc((100% - 16px) / #{$count});
+            }
+        }
+
+        @for $index from 0 through ($count - 1) {
+            &--count-#{$count}.segmented-tabs--active-#{$index} {
+                .segmented-tabs__indicator {
+                    left: calc(8px + ((100% - 16px) / #{$count}) * #{$index});
+                }
+            }
+        }
+    }
+
+    &--pills {
+        @include hide-scrollbar();
+
+        max-width: 100%;
+        min-width: 0;
+        height: 72px;
+        gap: calc(50px / 3);
+        overflow-x: auto;
+        overflow-y: hidden;
+        border-radius: 0;
+        background: transparent;
+        backdrop-filter: none;
+        white-space: nowrap;
+
+        .segmented-tabs__tab {
+            flex: none;
+            width: max-content;
+            min-width: 160px;
+            height: 72px;
+            padding: 0 30px;
+            color: var(--app-content-text-color, var(--app-text-color));
+            background: var(--app-card-bg);
+
+            &.segmented-tabs__tab--active {
+                @include button-skin();
+            }
+        }
+    }
+}

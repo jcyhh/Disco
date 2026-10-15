@@ -1,0 +1,246 @@
+.home-page {
+    color: var(--app-content-text-color);
+
+    &__banner {
+        width: 100%;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    &__banner-image {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+    }
+
+    &__notice {
+        height: 72px;
+        padding: 0 20px;
+        border-radius: 20px;
+        background: var(--app-card-bg);
+        box-shadow: var(--app-content-shadow);
+    }
+
+    &__notice-carousel {
+        height: 72px;
+        min-width: 0;
+    }
+
+    &__notice-text {
+        width: 100%;
+        height: 100%;
+        color: var(--app-text-color);
+
+        > span {
+            min-width: 0;
+        }
+    }
+
+    &__quick-grid {
+        column-gap: calc(50px / 3);
+    }
+
+    &__quick-link {
+        position: relative;
+        height: 150px;
+    }
+
+    &__quick-image {
+        width: 100%;
+        height: 150px;
+        object-fit: contain;
+    }
+
+    &__quick-label {
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        width: 100%;
+    }
+
+    &__exploration {
+        border-radius: 20px;
+        background: var(--app-card-bg);
+        box-shadow: var(--app-content-shadow);
+    }
+
+    &__exploration-header {
+        position: relative;
+        height: 200px;
+        border-radius: 20px 20px 0 0;
+        overflow: hidden;
+    }
+
+    &__exploration-banner {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    &__hero-copy {
+        position: absolute;
+        top: 40px;
+        left: 30px;
+    }
+
+    &__hero-title {
+        color: transparent;
+        background: linear-gradient(180deg, #FAFAFA 20.673%, #F5BD63 86.058%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        filter: drop-shadow(-1px 1px 0 #D32808);
+    }
+
+    &__hero-subtitle {
+        text-shadow: 0 0 10px #000000;
+    }
+
+    &__exploration-body {
+        padding: 30px;
+        border-radius: 0 0 20px 20px;
+        background: var(--app-card-bg) url('@/assets/home/exploration-background.webp') top center / 100% 232px no-repeat;
+    }
+
+    &__verified {
+        position: relative;
+        width: 28px;
+        height: 28px;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            top: -28.57143%;
+            left: -28.57143%;
+            width: 157.14286%;
+            max-width: none;
+        }
+    }
+
+    &__amount-value {
+        color: transparent;
+        background: linear-gradient(180deg, var(--app-color), var(--app-btn-gradient-start));
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
+
+    &__facts {
+        height: 136px;
+        padding: 28px 30px;
+        border: 1px solid var(--app-content-box-border);
+        border-radius: 20px;
+        background: var(--app-content-box-bg);
+    }
+
+    &__fact + &__fact {
+        border-left: 1px solid var(--app-content-box-border);
+    }
+
+    &__card-count {
+        color: var(--app-content-warning-color);
+    }
+
+    &__yield {
+        color: var(--app-content-positive-color);
+    }
+
+    &__about {
+        border-radius: 20px;
+        background: var(--app-card-bg);
+        box-shadow: var(--app-content-shadow);
+    }
+
+    &__about-header {
+        position: relative;
+        height: 200px;
+    }
+
+    &__about-banner {
+        width: 100%;
+        height: 200px;
+        border-radius: 20px;
+        object-fit: cover;
+    }
+
+    &__about-heading {
+        position: absolute;
+        top: 30px;
+        left: 8px;
+        text-shadow: 0 4px 4px rgb(255 255 255 / 50%);
+    }
+
+    &__about-star {
+        position: relative;
+        width: 52px;
+        height: 52px;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            top: -16.26%;
+            left: -15.52%;
+            width: 131.03448%;
+            max-width: none;
+        }
+    }
+
+    &__about-subtitle {
+        position: absolute;
+        top: 102px;
+        left: 60px;
+        text-shadow: 0 4px 4px rgb(255 255 255 / 50%);
+    }
+
+    &__about-body {
+        padding: 20px;
+    }
+
+    &__overview-item {
+        height: 126px;
+        padding: 20px;
+        border-radius: 16px;
+        background: var(--app-content-box-bg);
+    }
+
+    &__deflation {
+        position: relative;
+        height: 80px;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    &__deflation-banner {
+        width: 100%;
+        height: 80px;
+        object-fit: cover;
+    }
+
+    &__deflation-content {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+
+    &__deflation-label {
+        color: transparent;
+        background: linear-gradient(to top, #FF8400, #FFE388 50%, #FFCA91);
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
+
+    &__deflation-value {
+        color: transparent;
+        background: linear-gradient(180deg, #FFFFFF 20.673%, #FFC02C 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        filter: drop-shadow(0 4px 10px #000000);
+    }
+
+    &__muted {
+        color: var(--app-content-muted-color);
+    }
+
+    &__announcement-copy {
+        white-space: pre-line;
+    }
+}
+

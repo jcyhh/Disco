@@ -1,0 +1,171 @@
+@use '@/styles/mixins' as *;
+
+.invite-page {
+    position: relative;
+    isolation: isolate;
+    min-height: 1536px;
+    overflow: hidden;
+    background: #200946;
+
+    &__background {
+        position: absolute;
+        inset: 0 0 auto;
+        height: 1536px;
+        z-index: -2;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            top: -0.49%;
+            left: -0.02%;
+            width: 100.04%;
+            height: 105.6%;
+        }
+
+        &::after {
+            position: absolute;
+            inset: 0;
+            content: '';
+            background: linear-gradient(180deg, rgb(32 9 70 / 0%) 95%, #200946);
+        }
+    }
+
+    &__treasure {
+        position: absolute;
+        top: 124px;
+        left: 0;
+        width: 100%;
+        height: 600px;
+        z-index: -1;
+        object-fit: cover;
+    }
+
+    &__content {
+        padding: 647px 30px 0;
+    }
+
+    &__heading {
+        padding: 0 30px;
+    }
+
+    &__title,
+    &__subtitle,
+    &__code,
+    &__footer-copy {
+        @include gradient-word(linear-gradient(180deg, #FFF6B8 20.673%, #F1B965 86.058%));
+    }
+
+    &__title {
+        text-shadow: 0 0 20px #240F46, 0 2px #9A00C1;
+    }
+
+    &__subtitle,
+    &__footer-copy {
+        text-shadow: 0 0 20px #240F46;
+    }
+
+    &__card {
+        padding: 28px 28px 38px;
+        border: 2px solid #FF05DA;
+        border-radius: 20px;
+        background: rgb(93 70 132 / 50%);
+        backdrop-filter: blur(10px);
+    }
+
+    &__code-row {
+        min-height: 98px;
+        padding: 10px 10px 10px 28px;
+        border: 1px solid rgb(255 255 255 / 40%);
+        border-radius: 20px;
+        background: rgb(32 9 70 / 20%);
+    }
+
+    &__code {
+        letter-spacing: 10.4px;
+    }
+
+    &__code,
+    &__link {
+        -webkit-user-select: all;
+        user-select: all;
+    }
+
+    &__copy-code {
+        @include auto-button(
+            $height: 70px,
+            $radius: 16px,
+            $padding: 20px,
+            $gap: 6px,
+            $fontWeight: 400,
+            $color: var(--app-content-text-color),
+            $bg: linear-gradient(180deg, #FFF6B8 20.673%, #F1B965 86.058%),
+            $shadow: none
+        );
+
+        min-width: 140px;
+    }
+
+    &__copy-code-icon {
+        width: 32px;
+        height: 32px;
+        background: var(--app-content-text-color);
+        mask: url('@/assets/invite/copy-code-mask.png') center / 32px 32px no-repeat;
+    }
+
+    &__link-row {
+        min-height: 80px;
+        padding: 8px 8px 8px 18px;
+        border: 2px solid rgb(246 238 255 / 20%);
+        border-radius: 20px;
+        background: rgb(32 9 70 / 40%);
+    }
+
+    &__link {
+        min-width: 0;
+        color: #DBA5FF;
+    }
+
+    &__copy-link {
+        @include auto-button($height: 60px, $radius: 16px, $padding: 15px);
+    }
+
+    &__save {
+        @include full-button($height: 88px);
+    }
+
+    &__footer-copy {
+        min-width: 0;
+    }
+
+    &__divider {
+        position: relative;
+        width: 80px;
+        height: 16px;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            top: -100%;
+            left: -75.44%;
+            width: 315.41%;
+            height: 517.86%;
+        }
+
+        &--right {
+            transform: scaleX(-1);
+        }
+    }
+
+    &__poster-preview {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 65vh;
+        max-height: 65dvh;
+        object-fit: contain;
+    }
+
+    &__download {
+        @include full-button($height: 72px, $fontSize: 28px);
+    }
+}

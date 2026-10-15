@@ -1,0 +1,23 @@
+.app-icon {
+    display: inline-block;
+    flex: none;
+    width: 1em;
+    height: 1em;
+    color: currentColor;
+    vertical-align: -0.125em;
+    overflow: hidden;
+}
+
+.app-icon--loading {
+    box-sizing: border-box;
+    border: 2px solid var(--app-spinner-track-color);
+    border-top-color: var(--app-spinner-color);
+    border-radius: 50%;
+    animation: app-icon-loading 0.8s linear infinite;
+}
+
+@keyframes app-icon-loading {
+    to {
+        transform: rotate(360deg);
+    }
+}

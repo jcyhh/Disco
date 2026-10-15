@@ -1,0 +1,47 @@
+.reservation-page {
+    color: var(--app-content-text-color);
+
+    &__card {
+        border-radius: 32px;
+        box-shadow: var(--app-content-shadow);
+    }
+
+    &__timestamp {
+        white-space: nowrap;
+    }
+
+    &__details {
+        border-top: 1px solid var(--app-border-color);
+    }
+
+    &__detail-label {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    &__detail-value {
+        min-width: 0;
+        max-width: 65%;
+        overflow-wrap: anywhere;
+    }
+
+    &__detail-value--brand {
+        color: var(--app-color);
+    }
+
+    &__detail-value--positive {
+        color: var(--app-content-positive-color);
+    }
+
+    &__detail-value--warning {
+        color: var(--app-content-warning-color);
+    }
+
+    &__muted {
+        color: var(--app-content-muted-color);
+    }
+
+    &__sell {
+        @include full-button($height: 72px, $fontSize: 28px);
+    }
+}

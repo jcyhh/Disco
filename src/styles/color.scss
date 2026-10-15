@@ -1,0 +1,81 @@
+:root {
+    color-scheme: light;
+
+    --app-color: #D11BFF;
+    --app-page-bg-start: #F8EAFE;
+    --app-page-bg-end: #F9F9F9;
+    --app-page-bg: linear-gradient(180deg, var(--app-page-bg-start) 0%, var(--app-page-bg-end) 100%);
+    --app-text-color: #000000;
+    --app-secondary-text-color: #666666;
+    --app-placeholder-color: #807486;
+    --app-border-color: rgb(0 0 0 / 8%);
+    --app-overlay-bg: rgb(0 0 0 / 40%);
+    --app-accent-light: #E987FF;
+    --app-accent-shadow: rgb(209 27 255 / 20%);
+    --app-icon-filter: brightness(0);
+    --app-spinner-color: var(--app-secondary-text-color);
+    --app-spinner-track-color: rgb(0 0 0 / 16%);
+    --app-btn-gradient-start: #753DEA;
+    --app-btn-gradient-end: #B34CF7;
+    --app-btn-color: #FFFFFF;
+    --app-btn-bg: var(--app-btn-gradient-bg);
+    --app-btn-shadow: inset 0 0 20px rgb(255 255 255 / 60%);
+    --app-btn-disabled-color: rgb(0 0 0 / 38%);
+    --app-btn-disabled-bg: var(--app-box-bg);
+    --app-btn-solid-bg: var(--app-color);
+    --app-btn-gradient-bg: linear-gradient(90deg, var(--app-btn-gradient-start), var(--app-btn-gradient-end));
+    --app-btn-gradient-border: var(--app-btn-gradient-bg);
+    --app-progress-color: var(--app-color);
+    --app-progress-bg: var(--app-box-bg);
+    --app-segmented-tabs-bg: var(--app-box-bg);
+    --app-segmented-tabs-active-bg: var(--app-btn-bg);
+    --app-segmented-tabs-active-color: var(--app-btn-color);
+    --app-segmented-tabs-inactive-color: var(--app-secondary-text-color);
+    --app-popup-gradient-card-bg: linear-gradient(var(--app-card-bg), var(--app-card-bg));
+    --app-popup-gradient-card-border: linear-gradient(var(--app-color), var(--app-color));
+    --app-green: #34B926;
+    --app-red: #F1463D;
+    --app-blue: #1385FF;
+    --app-yellow: #F5C245;
+
+    --app-header-bg: #FFFFFF;
+    --app-secondary-header-bg: #FFFFFF;
+    --app-navigation-bg: #FFFFFF;
+    --app-card-bg: #FFFFFF;
+    --app-box-bg: #F3EDF6;
+    --app-content-text-color: #240F46;
+    --app-content-muted-color: rgb(36 15 70 / 50%);
+    --app-content-box-bg: #F6F5FD;
+    --app-content-box-border: #EAE6F7;
+    --app-content-shadow: 0 0 10px rgb(0 0 0 / 4%);
+    --app-content-positive-color: #1EC800;
+    --app-content-warning-color: #FF8400;
+    --app-content-highlight-color: #9900FF;
+    --app-content-soft-bg: #F7F3FF;
+    --app-content-divider-color: rgb(36 15 70 / 10%);
+}
+
+body{
+    min-height: 100vh;
+    min-height: 100dvh;
+    background-color: var(--app-page-bg-end);
+    background-image: var(--app-page-bg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--app-text-color);
+}
+
+input,
+textarea{
+    &::placeholder{
+        color: var(--app-placeholder-color);
+    }
+}
+
+.app-color{ color: var(--app-color); }
+.white{ color: #FFFFFF; } 
+.black{ color: #000000; }
+.green{ color: var(--app-green); }
+.red{ color: var(--app-red); }
+.blue{ color: var(--app-blue); }
+.yellow{ color: var(--app-yellow); }

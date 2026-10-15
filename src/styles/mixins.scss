@@ -1,0 +1,97 @@
+@mixin gradient-card(
+    $radius,
+    $bg: var(--app-popup-gradient-card-bg),
+    $border: var(--app-popup-gradient-card-border),
+    $borderWidth: 1px
+) {
+    border-radius: $radius;
+    border: $borderWidth solid transparent;
+    position: relative;
+    background: $bg padding-box, $border border-box;
+}
+
+@mixin gradient-word(
+    $bg: var(--app-btn-gradient-bg)
+){
+    display: inline-block;
+    background: $bg;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+@mixin hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+}
+
+@mixin calc-vh($px, $property: height) {
+    #{$property}: calc(100vh - #{$px}px);
+    #{$property}: calc(100dvh - #{$px}px);
+}
+
+@mixin button-skin(
+    $color: var(--app-btn-color),
+    $bg: var(--app-btn-bg),
+    $shadow: var(--app-btn-shadow)
+) {
+    color: $color;
+    background: $bg;
+    box-shadow: $shadow;
+}
+
+@mixin full-button(
+    $height: 80px,
+    $radius: 999px,
+    $color: var(--app-btn-color),
+    $bg: var(--app-btn-bg),
+    $padding: 30px,
+    $gap: 8px,
+    $fontSize: 32px,
+    $fontWeight: 600,
+    $shadow: var(--app-btn-shadow)
+){
+    @include button-skin($color, $bg, $shadow);
+
+    width: 100%;
+    height: $height;
+    border-radius: $radius;
+    padding: 0 $padding;
+    font-size: $fontSize;
+    font-weight: $fontWeight;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $gap;
+}
+
+@mixin auto-button(
+    $height: 56px,
+    $radius: 999px,
+    $padding: 24px,
+    $color: var(--app-btn-color),
+    $bg: var(--app-btn-bg),
+    $gap: 8px,
+    $fontSize: 24px,
+    $fontWeight: 500,
+    $shadow: var(--app-btn-shadow)
+){
+    @include button-skin($color, $bg, $shadow);
+
+    height: $height;
+    border-radius: $radius;
+    padding: 0 $padding;
+    font-size: $fontSize;
+    font-weight: $fontWeight;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $gap;
+}

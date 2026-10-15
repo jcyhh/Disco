@@ -1,0 +1,15 @@
+.app-countdown-timer {
+    gap: 14px;
+
+    &__item {
+        gap: 14px;
+    }
+
+    &__unit {
+        min-width: 80px;
+        min-height: 80px;
+        border: 1px solid var(--app-progress-bg, var(--app-box-bg));
+        border-radius: 12px;
+        background: var(--app-box-bg);
+    }
+}

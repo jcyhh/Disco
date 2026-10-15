@@ -1,0 +1,7 @@
+{
+    "isProjectLogoReady": true,
+    "logoPath": "public/brand/app-logo.png",
+    "faviconPath": "public/favicon.ico",
+    "messageEn": "Disco logo is configured and the 68x68 favicon has been generated.",
+    "messageZh": "Disco 项目 logo 已配置，68x68 favicon 已生成。"
+}
