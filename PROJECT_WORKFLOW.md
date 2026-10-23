@@ -380,8 +380,8 @@ Figma 切图方式太自由，AI 很难稳定判断最合适的导出组合，�
 Shared module overall layout and interaction contracts must not be changed to follow a page design unless there is explicit manual developer intervention.
 公共模块的整体布局和交互契约不要为了贴合某个页面设计稿而修改，除非开发者人工手动介入并明确要求。
 
-Disco's confirmed shared foundation is fixed: Header with the menu to the left of the logo and no separate app name; the left sidebar with its six entries (首页、预约记录、我的激活卡、我的资产、团队、邀请好友), icons and routes; brand assets; the original single-icon language switch and its interactions; the light theme; and the purple-gradient primary-button skin with white text and inset glow.
-Disco 已确认的公共基础固定：Header 菜单位于 Logo 左侧、Logo 不显示独立项目名；左侧弹出的侧栏及六项菜单（首页、预约记录、我的激活卡、我的资产、团队、邀请好友）、图标和路由；品牌资源；原有单图标语言开关及交互；亮色主题；紫色渐变、白字与内发光的主按钮皮肤。
+Disco's confirmed shared foundation is fixed: Header with the menu to the left of the logo and no separate app name; the left sidebar with its seven entries (首页、预约记录、购买激活卡、我的激活卡、我的资产、团队、邀请好友), icons and routes; brand assets; the original single-icon language switch and its interactions; the light theme; and the purple-gradient primary-button skin with white text and inset glow.
+Disco 已确认的公共基础固定：Header 菜单位于 Logo 左侧、Logo 不显示独立项目名；左侧弹出的侧栏及七项菜单（首页、预约记录、购买激活卡、我的激活卡、我的资产、团队、邀请好友）、图标和路由；品牌资源；原有单图标语言开关及交互；亮色主题；紫色渐变、白字与内发光的主按钮皮肤。
 
 Later reference images guide only page business content. Do not automatically adapt any fixed module's resources, text, arrangement, colors, dimensions, structure or interactions to match an image. Only an explicit user request naming the change permits an update; do not repeatedly ask about differences in reference images. New business buttons reuse the shared wrappers and may adjust their own size and radius without changing public defaults.
 后续效果图只指导页面业务内容。不得为了贴图自动调整固定模块的资源、文字、排列、颜色、尺寸、结构或交互；只有用户明确点名修改时才允许调整，不要因效果图差异反复询问。新增业务按钮继续复用公共封装，可调整按钮自身大小与圆角，不得修改公共默认值。
@@ -417,7 +417,7 @@ Do not implement device chrome in HTML, reserve height for it, or export it as a
 2. 页面语义结构：哪些地方用 button、input、textarea、img、nav 等。
 3. 主题颜色处理：复用 Disco 已固定主题，仅为新增业务内容判断哪些颜色提升到 src/styles/color.scss、哪些留在页面私有样式，不覆盖固定公共 token。
 4. 可复用组件：优先检查 src/components、src/shared/components、src/showcase。
-5. 公共模块保护：Disco 本节列出的 Header、左侧侧栏及六项菜单/图标/路由、品牌、单图标语言开关、亮色主题和主按钮皮肤已固定，资源、文字、排列、配色、尺寸与交互均不因效果图自动适配；只有我明确点名时才修改，不要因图上差异反复询问。其他尚未固定的公共模块继续保护整体布局和交互契约，允许原规则中的内容级适配；如确需改变此类模块结构，再询问是否创建页面专属组件。
+5. 公共模块保护：Disco 本节列出的 Header、左侧侧栏及七项菜单/图标/路由、品牌、单图标语言开关、亮色主题和主按钮皮肤已固定，资源、文字、排列、配色、尺寸与交互均不因效果图自动适配；只有我明确点名时才修改，不要因图上差异反复询问。其他尚未固定的公共模块继续保护整体布局和交互契约，允许原规则中的内容级适配；如确需改变此类模块结构，再询问是否创建页面专属组件。
 6. 设备外壳过滤：Figma 中的手机信息状态栏、运营商、电量、时间等不写进 H5 页面。
 7. 可复用样式：优先检查 src/styles 和已有 showcase。
 8. 可复用 mixin。
@@ -500,6 +500,8 @@ Use this route when a page reveals a reusable UI pattern.
 ```
 
 ## 9. API integration order
+接口联调范围以现有设计和开发者明确要求为准。接口文档中存在方法，不代表可以新增对应页面、入口或业务流程；无设计时仅直接补公告列表、公告详情等明确存在且无争议的配套页面。不要自行扩展个人资料、提取记录等设计外页面。
+
 ## 9. 接口联调顺序
 
 Use feature modules for business APIs.

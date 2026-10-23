@@ -22,6 +22,7 @@ export function AppBrand({
     const { pushRoute } = useAppNavigate()
     const brandClassName = [
         'app-brand',
+        'tap-target',
         'flex',
         'items-center',
         logoVariant === 'wordmark' && 'app-brand--wordmark',

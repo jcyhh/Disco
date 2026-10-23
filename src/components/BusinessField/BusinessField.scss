@@ -1,0 +1,16 @@
+.business-field {
+    input,
+    select,
+    &__picker-trigger {
+        width: 100%;
+        min-width: 0;
+        min-height: 80px;
+        padding: 10px 20px;
+        border: 1px solid var(--app-content-box-border);
+        border-radius: 16px;
+        background: var(--app-content-box-bg);
+        color: var(--app-text-color);
+        font: inherit;
+    }
+
+}

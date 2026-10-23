@@ -36,7 +36,7 @@ export function SecondaryHeader({
                     <div className="flex items-center flex-1">
                         <Icon
                             name="arrow-left"
-                            className="size-40"
+                            className="tap-target size-40"
                             onClick={handleBackClick}
                         />
                     </div>

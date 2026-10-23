@@ -91,7 +91,7 @@ test('only sends Address in a DApp wallet host', async () => {
     )
 })
 
-test('keeps the token header even when local token storage is empty', async () => {
+test('omits the token header when local token storage is empty', async () => {
     globalThis.window = { localStorage: createStorage() }
     let captured
 
@@ -103,8 +103,7 @@ test('keeps the token header even when local token storage is empty', async () =
         },
     })
 
-    assert.equal(captured.headers.has('Authorization'), true)
-    assert.match(captured.headers.get('Authorization') ?? '', /^Bearer/)
+    assert.equal(captured.headers.has('Authorization'), false)
 })
 
 test('does not send lang when i18n is disabled', async () => {

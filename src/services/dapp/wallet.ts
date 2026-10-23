@@ -99,9 +99,12 @@ export async function getConnectedDappAddress(): Promise<Address> {
     return normalizeAddress(requestedAddress)
 }
 
-export async function connectDappWallet(): Promise<DappWalletConnection> {
+export async function connectDappWallet(options: {
+    assertCurrent?: () => void
+} = {}): Promise<DappWalletConnection> {
     const address = await getConnectedDappAddress()
     const chainId = await getDappChainId()
+    options.assertCurrent?.()
 
     useDappStore.getState().setProviderStatus(DAPP_PROVIDER_STATUS.available)
     useDappStore.getState().setWalletAddress(address)
@@ -119,9 +122,14 @@ export function disconnectDappWallet(): void {
 
 export async function signDappMessage(
     message: DappSignMessage | string,
+    options: { account?: Address; assertCurrent?: () => void } = {},
 ): Promise<DappSignResult> {
     const walletClient = getDappWalletClient()
     const address = await getConnectedDappAddress()
+    options.assertCurrent?.()
+    if (options.account && options.account.toLowerCase() !== address.toLowerCase()) {
+        throw new Error(translateDappErrorMessage(DAPP_ERROR_MESSAGE.walletAddressUnavailable))
+    }
     const timestamp = Math.floor(Date.now() / 1000)
     const signMessage = `${message}-${timestamp}`
     const signature = await walletClient.signMessage({
@@ -148,9 +156,14 @@ export function startDappWalletListeners(
     stopDappWalletListeners()
 
     const provider = getDappProvider()
+    let lastAddress = useDappStore.getState().walletAddress.toLowerCase()
+    let lastChainId = useDappStore.getState().chainId
 
     const handleAccountsChanged = (accounts: unknown) => {
         const [address] = Array.isArray(accounts) ? accounts : []
+        const nextAddress = typeof address === 'string' ? address.toLowerCase() : ''
+        if (nextAddress === lastAddress) return
+        lastAddress = nextAddress
 
         if (typeof address === 'string' && address) {
             useDappStore.getState().setWalletAddress(address as Address)
@@ -164,12 +177,15 @@ export function startDappWalletListeners(
 
     const handleChainChanged = (chainId: unknown) => {
         const parsedChainId = parseDappChainId(chainId)
+        const unchanged = parsedChainId === lastChainId
+        lastChainId = parsedChainId
 
         useDappStore.getState().setChainId(
             parsedChainId,
         )
 
         if (consumeControlledDappChainChange(parsedChainId)) return
+        if (unchanged) return
 
         options.onChainChanged?.(parsedChainId)
     }

@@ -71,6 +71,7 @@ export function selectImageFile(
 
 export function uploadFile({
     file,
+    signal,
     url = HTTP_UPLOAD_CONFIG.url,
     fieldName = HTTP_UPLOAD_CONFIG.fieldName,
     fields = {},
@@ -84,6 +85,7 @@ export function uploadFile({
     }
 
     return request<UploadResult, FormData>({
+        signal,
         method: 'POST',
         url,
         data,

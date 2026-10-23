@@ -113,7 +113,7 @@ export async function getErc20OwnerAddress(owner?: Address): Promise<Address> {
 }
 
 export async function readErc20Name(tokenAddress?: Address): Promise<string> {
-    return readDappContract<string>({
+    return readDappContract({
         address: getErc20Address(tokenAddress),
         abi: ERC20_ABI,
         functionName: 'name',
@@ -121,7 +121,7 @@ export async function readErc20Name(tokenAddress?: Address): Promise<string> {
 }
 
 export async function readErc20Symbol(tokenAddress?: Address): Promise<string> {
-    return readDappContract<string>({
+    return readDappContract({
         address: getErc20Address(tokenAddress),
         abi: ERC20_ABI,
         functionName: 'symbol',
@@ -129,7 +129,7 @@ export async function readErc20Symbol(tokenAddress?: Address): Promise<string> {
 }
 
 export async function readErc20Decimals(tokenAddress?: Address): Promise<number> {
-    return readDappContract<number>({
+    return readDappContract({
         address: getErc20Address(tokenAddress),
         abi: ERC20_ABI,
         functionName: 'decimals',
@@ -137,7 +137,7 @@ export async function readErc20Decimals(tokenAddress?: Address): Promise<number>
 }
 
 export async function readErc20TotalSupply(tokenAddress?: Address): Promise<bigint> {
-    return readDappContract<bigint>({
+    return readDappContract({
         address: getErc20Address(tokenAddress),
         abi: ERC20_ABI,
         functionName: 'totalSupply',
@@ -148,7 +148,7 @@ export async function readErc20Balance(
     tokenAddress?: Address,
     owner?: Address,
 ): Promise<bigint> {
-    return readDappContract<bigint>({
+    return readDappContract({
         address: getErc20Address(tokenAddress),
         abi: ERC20_ABI,
         functionName: 'balanceOf',
@@ -161,7 +161,7 @@ export async function readErc20Allowance(
     tokenAddress?: Address,
     owner?: Address,
 ): Promise<bigint> {
-    return readDappContract<bigint>({
+    return readDappContract({
         address: getErc20Address(tokenAddress),
         abi: ERC20_ABI,
         functionName: 'allowance',
@@ -185,9 +185,10 @@ export async function writeErc20Approve(
     spender: Address,
     amount: bigint,
     tokenAddress?: Address,
+    owner?: Address,
 ): Promise<TransactionReceipt> {
     const contract = createDappContractActions(getErc20Address(tokenAddress), ERC20_ABI)
-    return contract.writeWithGas('approve', [spender, amount])
+    return contract.writeWithGas('approve', [spender, amount], { account: owner })
 }
 
 export async function ensureErc20Allowance(
@@ -201,7 +202,7 @@ export async function ensureErc20Allowance(
     if (allowance >= amount) return undefined
 
     const approveAmount = getErc20ApproveAmount(amount)
-    return writeErc20Approve(spender, approveAmount, tokenAddress)
+    return writeErc20Approve(spender, approveAmount, tokenAddress, owner)
 }
 
 export async function writeErc20Transfer(

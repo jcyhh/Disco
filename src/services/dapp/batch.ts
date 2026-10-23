@@ -23,7 +23,7 @@ export async function sendDappBatchCalls(
             abi: call.abi,
             functionName: call.functionName,
             args: call.args ?? [],
-        } as any),
+        }),
         value: call.value ?? '0x0',
     }))
 

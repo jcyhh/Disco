@@ -1,0 +1,74 @@
+@keyframes page-reveal-rise {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes page-reveal-scale {
+    from {
+        opacity: 0;
+        transform: scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes page-reveal-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes section-star-twinkle {
+    0%,
+    100% {
+        opacity: 0.55;
+        transform: scale(0.82);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.12);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .section-star-motion {
+        animation: section-star-twinkle 2.8s ease-in-out infinite;
+    }
+
+    [data-reveal].page-reveal--waiting {
+        opacity: 0;
+    }
+
+    [data-reveal].page-reveal--visible {
+        animation: page-reveal-rise 480ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+
+    [data-reveal="scale"].page-reveal--visible {
+        animation-name: page-reveal-scale;
+        animation-duration: 560ms;
+    }
+
+    [data-reveal="fade"].page-reveal--visible {
+        animation-name: page-reveal-fade;
+    }
+
+    @for $i from 1 through 4 {
+        [data-reveal-delay="#{$i}"].page-reveal--visible {
+            animation-delay: $i * 60ms;
+        }
+    }
+
+    [data-reveal].page-reveal--immediate {
+        animation: none;
+    }
+}

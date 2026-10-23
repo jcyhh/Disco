@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Popup } from '@/components/Popup'
 
 import './ContractLoading.scss'
@@ -14,6 +15,7 @@ export function ContractLoading({
     show,
     className = '',
 }: ContractLoadingProps) {
+    const { t } = useTranslation()
     const loadingClassName = [
         'contract-loading',
         className,
@@ -30,7 +32,7 @@ export function ContractLoading({
             className="contract-loading-popup"
             contentClassName="contract-loading-popup__content"
         >
-            <div className={loadingClassName} aria-label="Contract loading" role="status">
+            <div className={loadingClassName} aria-label={t('合约处理中')} role="status">
                 <div className="contract-loading__inner">
                     {LOADING_DOTS.map((dotIndex) => (
                         <span

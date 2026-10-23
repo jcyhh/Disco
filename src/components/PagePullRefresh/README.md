@@ -43,3 +43,6 @@ Do not wrap splash, login or other flow pages with this component.
 不要把开屏页、登录页或其他流程页包进这个组件。
 
 `onError(error)` optionally handles rejected refresh work. Failures settle the indicator and permit a later pull; no rejected promise escapes a touch event. Route handler cleanup and container unmount invalidate the pending refresh, so late work does not update the next page or restart a settle timer. Pages remain responsible for cancelling their actual requests or ignoring stale response data.
+
+Touch gestures are accepted only from the refresh container's DOM descendants. Portal events from dialogs, pickers and sidebars are ignored, so modal scrolling does not refresh the underlying page or get cancelled by this container.
+下拉手势只接受刷新容器真实 DOM 后代的事件。弹窗、Picker 和侧栏通过 Portal 渲染的手势会被忽略，滚动弹窗不会触发底层刷新，也不会被刷新容器阻止。

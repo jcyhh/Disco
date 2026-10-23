@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { translate } from '../../i18n/index.ts'
 
 import { message } from '../../components/Message/message.ts'
 import { getAuthSessionVersion } from '../../features/auth/lifecycle.ts'
@@ -21,7 +22,7 @@ import { toHttpError } from './error.ts'
 const requestSessions = new WeakMap<object, { token: string; version: number }>()
 
 export const httpClient = axios.create({
-    baseURL: import.meta.env?.VITE_BASE_URL,
+    baseURL: import.meta.env?.PROD ? '' : import.meta.env?.VITE_BASE_URL,
     timeout: HTTP_CONFIG.timeout,
 })
 
@@ -33,12 +34,10 @@ httpClient.interceptors.request.use((config) => {
     const token = getToken()
     requestSessions.set(config, { token, version: getAuthSessionVersion() })
 
-    config.headers.set(
-        HTTP_HEADER.authorization,
-        `${HTTP_AUTH.scheme} ${token}`,
-    )
+    if (token) config.headers.set(HTTP_HEADER.authorization, `${HTTP_AUTH.scheme} ${token}`)
+    else config.headers.delete(HTTP_HEADER.authorization)
 
-    if (isDappEnvironment()) {
+    if (isDappEnvironment() && token && getWalletAddress()) {
         config.headers.set(HTTP_HEADER.walletAddress, getWalletAddress())
     } else {
         config.headers.delete(HTTP_HEADER.walletAddress)
@@ -76,7 +75,7 @@ httpClient.interceptors.response.use(
         }
 
         if (!axios.isCancel(error) && (!isUnauthorized || belongsToCurrentSession)) {
-            message.warning(httpError.message)
+            message.warning(translate(httpError.message))
         }
         return Promise.reject(httpError)
     },

@@ -46,3 +46,14 @@ EIP-7702 委托账户需要这条规则，因为 `eth_call` 缺少 `account` / `
 
 Every new user-context read must include regression tests for business-layer address passing, `readDappContract` forwarding to viem `readContract`, and public reads staying account-free.
 每次新增依赖用户上下文的读取，都必须补回归测试，覆盖业务层传入地址、`readDappContract` 透传给 viem `readContract`，以及公共读取不传 `account`。
+
+
+# Project contracts
+
+Disco 的业务合约层；部署和后端签名映射见 [docs/contracts/README.md](../../../docs/contracts/README.md)。
+
+- `config.ts` 从 env 读取部署链 ID、USDT、DISCO 与 DiscoProject 地址，配置缺失或链不匹配时拒绝交易。
+- `discoProjectAbi.ts` 保留开发者部署文件中的完整 DiscoProject ABI。
+- `disco.ts` 仅开放页面已有的预约、购买卡和卖出动作，统一复用 DApp 服务完成完整交易，不新增管理或资金入口。
+
+共享写入现在支持可选 `account` 作为预期发送者，检测到当前钱包改变时终止。`ensureErc20Allowance` 的显式 owner 同样透传给授权交易；未提供该参数时保持原有行为。

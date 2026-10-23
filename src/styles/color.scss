@@ -1,9 +1,12 @@
+@use './mixins' as *;
+
 :root {
     color-scheme: light;
 
     --app-color: #D11BFF;
     --app-page-bg-start: #F8EAFE;
     --app-page-bg-end: #F9F9F9;
+    --app-page-bg-height: 800px;
     --app-page-bg: linear-gradient(180deg, var(--app-page-bg-start) 0%, var(--app-page-bg-end) 100%);
     --app-text-color: #000000;
     --app-secondary-text-color: #666666;
@@ -37,6 +40,12 @@
     --app-red: #F1463D;
     --app-blue: #1385FF;
     --app-yellow: #F5C245;
+    --app-message-color: #FFFFFF;
+    --app-message-bg: linear-gradient(180deg, #12161A 0%, #0E0F13 100%);
+    --app-message-success-bg: #009C3E;
+    --app-message-info-bg: #C7C7C7;
+    --app-message-fail-bg: #D02052;
+    --app-message-warning-bg: #FF8B2D;
 
     --app-header-bg: #FFFFFF;
     --app-secondary-header-bg: #FFFFFF;
@@ -56,12 +65,10 @@
 }
 
 body{
+    @include page-background();
+
     min-height: 100vh;
     min-height: 100dvh;
-    background-color: var(--app-page-bg-end);
-    background-image: var(--app-page-bg);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
     color: var(--app-text-color);
 }
 

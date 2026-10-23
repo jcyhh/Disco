@@ -12,6 +12,10 @@ export interface IconDefinition {
 export const DEFAULT_ICON_VIEW_BOX = '0 0 1024 1024'
 
 export const ICON_DEFINITIONS = {
+    'plus': {
+        viewBox: '0 0 24 24',
+        paths: [{ d: 'M10.5 2h3v8.5H22v3h-8.5V22h-3v-8.5H2v-3h8.5V2Z' }],
+    },
     'arrow': {
         paths: [
             {

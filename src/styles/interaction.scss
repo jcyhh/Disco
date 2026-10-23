@@ -1,0 +1,23 @@
+$tap-targets: 'button, a[href], [role="button"], input[type="button"], input[type="submit"], input[type="reset"], .tap-target';
+
+:where(#{$tap-targets}) {
+    touch-action: manipulation;
+    transition: scale 120ms ease-out, filter 120ms ease-out;
+
+    &:not(:disabled):not([disabled]):not([aria-disabled="true"]):not([aria-busy="true"]):active {
+        filter: brightness(0.9);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    :where(#{$tap-targets}):not(:disabled):not([disabled]):not([aria-disabled="true"]):not([aria-busy="true"]):active {
+        // Independent scale preserves existing entrance animations and transforms.
+        scale: 0.97;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :where(#{$tap-targets}) {
+        transition: none;
+    }
+}

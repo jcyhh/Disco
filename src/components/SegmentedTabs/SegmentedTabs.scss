@@ -31,7 +31,11 @@
         color: var(--app-segmented-tabs-active-color, var(--app-btn-color));
         background: transparent;
         cursor: pointer;
-        transition: color 0.3s;
+        transition: color 0.3s, scale 120ms ease-out, filter 120ms ease-out;
+
+        @media (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
 
         &:disabled {
             cursor: not-allowed;

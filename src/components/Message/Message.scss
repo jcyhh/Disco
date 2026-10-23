@@ -1,33 +1,61 @@
 .message-toast-root {
     position: fixed;
-    z-index: 10000000;
-    right: 0;
+    left: 30px;
     bottom: calc(env(safe-area-inset-bottom) + 30px);
-    left: 0;
-    display: flex;
-    justify-content: center;
+    z-index: 10000000;
+    width: 690px;
+    max-width: calc(100vw - 60px);
+    max-width: calc(100dvw - 60px);
     pointer-events: none;
 }
 
 .message-toast {
-    width: 690px;
-    max-width: calc(100vw - 60px);
-    max-width: calc(100dvw - 60px);
-    color: inherit;
-    background: var(--app-card-bg);
-    border: 1px solid var(--app-border-color);
-    border-radius: 16px;
+    padding: 16px 4px 4px;
+    border-radius: 30px;
+    color: var(--app-message-color);
+    box-shadow: 0 16px 40px rgb(0 0 0 / 30%);
     pointer-events: auto;
 
-    &--success { border-color: var(--app-green); }
-    &--info { border-color: var(--app-blue); }
-    &--fail { border-color: var(--app-red); }
-    &--warning { border-color: var(--app-yellow); }
+    &__box {
+        width: 100%;
+        position: relative;
+        z-index: 1;
+        border-radius: 26px;
+        background: var(--app-message-bg);
+    }
+
+    &__icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    &__text {
+        min-width: 0;
+    }
 
     &__close {
-        border: 0;
-        color: inherit;
-        background: transparent;
+        padding: 0;
         cursor: pointer;
+    }
+
+    &__close-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    &--success {
+        background-color: var(--app-message-success-bg);
+    }
+
+    &--info {
+        background-color: var(--app-message-info-bg);
+    }
+
+    &--fail {
+        background-color: var(--app-message-fail-bg);
+    }
+
+    &--warning {
+        background-color: var(--app-message-warning-bg);
     }
 }

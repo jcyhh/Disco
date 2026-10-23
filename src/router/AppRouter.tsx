@@ -17,11 +17,13 @@ import {
     HomePage,
     InvitePage,
     MainLayout,
+    PurchaseCardPage,
     ReservationPage,
     TeamPage,
     UserPage,
 } from '@/pages/main'
 import { SplashPage } from '@/pages/splash/SplashPage.tsx'
+import { NoticeDetailPage, NoticeListPage } from '@/pages/notice'
 import { SHOWCASE_ROUTE_ELEMENTS } from '@/showcase/router/index.ts'
 import { useUserStore } from '@/stores/user/store.ts'
 
@@ -72,12 +74,15 @@ export function AppRouter() {
                         <Route element={<MainLayout />}>
                             <Route path={ROUTE_PATH.home.slice(1)} element={<HomePage />} />
                             <Route path={ROUTE_PATH.reservation.slice(1)} element={<ReservationPage />} />
+                            <Route path={ROUTE_PATH.purchaseCard.slice(1)} element={<PurchaseCardPage />} />
                             <Route path={ROUTE_PATH.activationCard.slice(1)} element={<ActivationCardPage />} />
                             <Route path={ROUTE_PATH.asset.slice(1)} element={<AssetPage />} />
                             <Route path={ROUTE_PATH.team.slice(1)} element={<TeamPage />} />
                             <Route path={ROUTE_PATH.invite.slice(1)} element={<InvitePage />} />
                             <Route path={ROUTE_PATH.user.slice(1)} element={<UserPage />} />
                         </Route>
+                        <Route path={ROUTE_PATH.notice.slice(1)} element={<NoticeListPage />} />
+                        <Route path={ROUTE_PATH.noticeDetail.slice(1)} element={<NoticeDetailPage />} />
                     </Route>
                 </Route>
 

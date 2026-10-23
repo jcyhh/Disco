@@ -13,6 +13,10 @@ test('main first-level pages keep matching page directories and files', () => {
             component: 'ReservationPage',
         },
         {
+            dir: 'src/pages/main/purchase-card',
+            component: 'PurchaseCardPage',
+        },
+        {
             dir: 'src/pages/main/activation-card',
             component: 'ActivationCardPage',
         },

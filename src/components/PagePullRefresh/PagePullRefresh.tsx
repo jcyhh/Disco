@@ -184,6 +184,8 @@ export function PagePullRefresh(props: PagePullRefreshProps) {
 
     const handleTouchStart = useCallback((event: TouchEvent<HTMLDivElement>) => {
         if (!enabled || refreshHandlerRef.current === undefined || isRefreshingRef.current) return
+        // Portal events bubble through React parents, including dialogs outside this DOM tree.
+        if (!(event.target instanceof Node) || !event.currentTarget.contains(event.target)) return
         if (!isPageAtTop()) return
         if (isFocusedFormControlTarget(event.target)) return
 

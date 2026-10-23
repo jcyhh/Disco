@@ -9,7 +9,7 @@ import { createRoot } from 'react-dom/client'
 
 export function installUiDom() {
     const window = new Window({ url: 'https://example.test/' })
-    for (const name of ['window', 'document', 'navigator', 'HTMLElement', 'Element', 'Node', 'Event', 'MouseEvent', 'KeyboardEvent']) {
+    for (const name of ['window', 'document', 'navigator', 'HTMLElement', 'Element', 'Node', 'Event', 'MouseEvent', 'KeyboardEvent', 'DOMParser']) {
         Object.defineProperty(globalThis, name, { value: name === 'window' ? window : window[name], configurable: true, writable: true })
     }
     globalThis.IS_REACT_ACT_ENVIRONMENT = true
@@ -30,7 +30,7 @@ export function installUiDom() {
             return nextResolve(specifier, context)
         },
         load(url, context, nextLoad) {
-            if (/\.(scss|css|png|svg)$/.test(url)) return { format: 'module', shortCircuit: true, source: `export default ${JSON.stringify(url)}` }
+            if (/\.(scss|css|png|svg|webp|jpe?g|gif)$/.test(url)) return { format: 'module', shortCircuit: true, source: `export default ${JSON.stringify(url)}` }
             if (url.endsWith('.tsx')) {
                 return { format: 'module', shortCircuit: true, source: ts.transpileModule(readFileSync(new URL(url), 'utf8'), {
                     compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },

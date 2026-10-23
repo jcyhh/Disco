@@ -33,7 +33,7 @@ export function PopupContentBottom({
         <div className={classes} {...props}>
             <div className="popup-content__header">
                 <div className="popup-content__title size-32 bold-6">{resolvedTitle}</div>
-                {onClose ? <button type="button" className="popup-content__close flex-center" aria-label="Close dialog" onClick={onClose}>
+                {onClose ? <button type="button" className="popup-content__close flex-center" aria-label={t('关闭弹窗')} onClick={onClose}>
                     <Icon name="cross" className="size-48 opc-6" />
                 </button> : null}
             </div>

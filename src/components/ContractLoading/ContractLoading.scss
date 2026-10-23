@@ -44,7 +44,7 @@
             width: 56px;
             height: 56px;
             content: "";
-            background-color: var(--app-color);
+            background: linear-gradient(135deg, var(--app-btn-gradient-start) 0%, var(--app-btn-gradient-end) 55%, var(--app-color) 100%);
             border-radius: 50%;
             box-shadow: 0 0 30px var(--app-accent-shadow);
         }

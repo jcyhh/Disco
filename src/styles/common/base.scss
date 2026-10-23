@@ -1,3 +1,9 @@
+@use '../mixins' as *;
+
+.secondary-page-background {
+    @include page-background(calc(100px + env(safe-area-inset-top)));
+}
+
 .app-card{
     background-color: var(--app-card-bg);
     padding: 30px;

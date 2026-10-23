@@ -222,3 +222,9 @@ Start the wrapper before the first preparatory read. For manual ownership, `begi
 
 Gas estimation forwards native-token `value` together with the ABI call, matching the actual payable write. Contract diagnostics are generic and gated by `DAPP_CONFIG.enableContractDebug` (development by default). They format bigint and must never change a successful result or replace the original error.
 gas 估算同时转发原生币 `value`，与实际 payable 写入一致。合约诊断不绑定业务标识，由 `DAPP_CONFIG.enableContractDebug` 控制（默认仅开发开启），格式化 bigint，且不得影响读取结果或覆盖原始错误。
+
+## ABI typing
+## ABI 类型约束
+
+Use literal ABIs (`as const` or `parseAbi`) with reads, writes and `createDappContractActions`. Function names, read/write mutability, required argument tuples and read return types are inferred from the ABI. Do not supply a manual return-type generic or widen a literal ABI to `Abi`. Signed API values still require runtime validation.
+合约读取、写入及绑定动作工厂使用字面量 ABI（`as const` 或 `parseAbi`），从 ABI 自动推导方法名、读写类型、必需参数和读取返回值。不再手动传返回类型泛型，也不要把字面量 ABI 扩宽为 `Abi`。接口签名数据仍保留运行时校验。类型反例检查在 `tests/dapp-contract-types.test.mjs`。

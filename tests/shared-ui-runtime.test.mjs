@@ -13,6 +13,7 @@ const { SegmentedTabs } = await import('../src/components/SegmentedTabs/Segmente
 const { ProgressBar } = await import('../src/components/ProgressBar/ProgressBar.tsx')
 const { InfiniteScroll } = await import('../src/components/InfiniteScroll/InfiniteScroll.tsx')
 const { ConfirmPopup } = await import('../src/components/ConfirmPopup/ConfirmPopup.tsx')
+const { Popup } = await import('../src/components/Popup/Popup.tsx')
 const { Picker } = await import('../src/components/Picker/Picker.tsx')
 const { CountdownTimer } = await import('../src/components/CountdownTimer/CountdownTimer.tsx')
 const { calculateCountdownParts } = await import('../src/shared/time/calculateCountdownParts.ts')
@@ -137,7 +138,8 @@ test('toast replaces prior content safely, cancels obsolete timers, then removes
         assert.equal(document.querySelector('.message-toast__text').textContent, 'First')
         await act(async () => { message({ message: '<img src=x onerror=alert(1)>', type: 'success', duration: 0 }); await Promise.resolve() })
         assert.equal(document.querySelectorAll('.message-toast-root').length, 1)
-        assert.equal(document.querySelector('.message-toast img'), null)
+        assert.equal(document.querySelector('.message-toast__text').querySelector('img'), null)
+        assert.ok(document.querySelector('.message-toast__icon'))
         assert.equal(document.querySelector('.message-toast__text').textContent, '<img src=x onerror=alert(1)>')
         assert.equal(timers.pending.size, 0)
         await act(async () => message.close())
@@ -170,6 +172,36 @@ test('pull refresh awaits real work, settles a rejection, and permits retry', as
         await pull(view.container)
         await timers.flush()
         assert.equal(calls, 2)
+    } finally { await view.unmount(); timers.restore() }
+})
+
+test('portal dialog gestures do not refresh or cancel scrolling, while page gestures still refresh', async () => {
+    const timers = installWindowTimers(dom.window)
+    let calls = 0
+    function Page({ show }) {
+        usePageRefresh(useCallback(async () => { calls++ }, []))
+        return h(Popup, { show, title: 'Announcement' }, h('div', { className: 'scroll-y' }, 'Long announcement'))
+    }
+    const render = (show) => h(PagePullRefresh, null, h(Page, { show }))
+    const view = await mount(render(true))
+    try {
+        const content = document.querySelector('[role="dialog"] .scroll-y')
+        let wasCancelled
+        await act(async () => {
+            touch(content, 'touchstart', 10)
+            const move = new dom.window.Event('touchmove', { bubbles: true, cancelable: true })
+            Object.defineProperty(move, 'touches', { value: [{ clientY: 240 }] })
+            content.dispatchEvent(move)
+            wasCancelled = move.defaultPrevented
+            touch(content, 'touchend', 240)
+        })
+        assert.equal(calls, 0)
+        assert.equal(wasCancelled, false)
+        await view.render(render(false))
+        await act(async () => document.querySelector('[role="dialog"]').dispatchEvent(new dom.window.Event('animationend', { bubbles: true })))
+        await pull(view.container)
+        await timers.flush()
+        assert.equal(calls, 1)
     } finally { await view.unmount(); timers.restore() }
 })
 

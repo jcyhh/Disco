@@ -38,7 +38,7 @@ test('contract loading wraps popup and blocks interaction during contract writes
     assert.match(component, /contract-loading__dot/)
     assert.doesNotMatch(component, /style=/)
     assert.doesNotMatch(component, /<circle/)
-    assert.match(component, /aria-label="Contract loading"/)
+    assert.match(component, /aria-label=\{t\('合约处理中'\)\}/)
 
     assert.match(styles, /\.contract-loading-popup/)
     assert.match(styles, /z-index:\s*1000000/)
@@ -51,7 +51,7 @@ test('contract loading wraps popup and blocks interaction during contract writes
     assert.match(styles, /&__dot\s*\{[\s\S]*position:\s*absolute;/)
     assert.match(styles, /animation:\s*contract-loading-rotate 3s ease-in-out infinite/)
     assert.match(styles, /&--#\{\$i\}/)
-    assert.match(styles, /&::before\s*\{[\s\S]*background-color:\s*var\(--app-color\);/)
+    assert.match(styles, /&::before\s*\{[\s\S]*background:\s*linear-gradient\([^;]+var\(--app-color\)[^;]*\);/)
     assert.match(styles, /border-radius:\s*50%/)
     assert.match(styles, /box-shadow:\s*0 0 30px var\(--app-accent-shadow\)/)
     assert.match(styles, /@keyframes contract-loading-rotate/)

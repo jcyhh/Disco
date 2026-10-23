@@ -68,6 +68,7 @@ test('route records expose business pages and retain the existing user route', (
     assert.equal(ROUTE_PATH.referral, '/ref/:ref')
     assert.equal(ROUTE_PATH.home, `/${APP_CONFIG.homeRouteName}`)
     assert.equal(ROUTE_PATH.reservation, '/reservation')
+    assert.equal(ROUTE_PATH.purchaseCard, '/purchase-card')
     assert.equal(ROUTE_PATH.activationCard, '/activation-card')
     assert.equal(ROUTE_PATH.asset, '/asset')
     assert.equal(ROUTE_PATH.team, '/team')
@@ -75,10 +76,11 @@ test('route records expose business pages and retain the existing user route', (
     assert.equal(ROUTE_PATH.user, '/user')
 })
 
-test('main menu exposes the six requested destinations without duplicate or invalid routes', () => {
+test('main menu exposes the seven requested destinations without duplicate or invalid routes', () => {
     assert.deepEqual(MAIN_PAGE_ITEMS.map(({ path, title }) => ({ path, title })), [
         { path: ROUTE_PATH.home, title: '首页' },
         { path: ROUTE_PATH.reservation, title: '预约记录' },
+        { path: ROUTE_PATH.purchaseCard, title: '购买激活卡' },
         { path: ROUTE_PATH.activationCard, title: '我的激活卡' },
         { path: ROUTE_PATH.asset, title: '我的资产' },
         { path: ROUTE_PATH.team, title: '团队' },
@@ -106,6 +108,7 @@ test('main page exports and router register every menu destination in its page m
     const pageModules = [
         ['home', 'HomePage', 'home'],
         ['reservation', 'ReservationPage', 'reservation'],
+        ['purchaseCard', 'PurchaseCardPage', 'purchase-card'],
         ['activationCard', 'ActivationCardPage', 'activation-card'],
         ['asset', 'AssetPage', 'asset'],
         ['team', 'TeamPage', 'team'],

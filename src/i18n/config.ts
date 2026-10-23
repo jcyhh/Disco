@@ -35,11 +35,35 @@ export const APP_LANGUAGES = [
         ),
     },
     {
-        name: '繁體中文', code: 'zh-Hant',
+        name: '日本語', code: 'ja',
         load: () => loadLanguageMessages(
-            import('./locales/common/zh-Hant.json'),
-            import('./locales/common/dappH5/zh-Hant.json'),
-            import('./locales/project/zh-Hant.json'),
+            import('./locales/common/ja.json'),
+            import('./locales/common/dappH5/ja.json'),
+            import('./locales/project/ja.json'),
+        ),
+    },
+    {
+        name: '한국어', code: 'ko',
+        load: () => loadLanguageMessages(
+            import('./locales/common/ko.json'),
+            import('./locales/common/dappH5/ko.json'),
+            import('./locales/project/ko.json'),
+        ),
+    },
+    {
+        name: 'Монгол', code: 'mn',
+        load: () => loadLanguageMessages(
+            import('./locales/common/mn.json'),
+            import('./locales/common/dappH5/mn.json'),
+            import('./locales/project/mn.json'),
+        ),
+    },
+    {
+        name: 'Русский', code: 'ru',
+        load: () => loadLanguageMessages(
+            import('./locales/common/ru.json'),
+            import('./locales/common/dappH5/ru.json'),
+            import('./locales/project/ru.json'),
         ),
     },
     {

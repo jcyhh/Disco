@@ -16,7 +16,7 @@ export function TabbarMenu() {
     return (
         <nav>
             <div className="gap-100" />
-            <div className="app-tabbar vw-100" aria-label="Tabbar menu">
+            <div className="app-tabbar vw-100" aria-label={t('底部菜单')}>
                 <div className="app-tabbar__bar flex">
                     {MAIN_PAGE_ITEMS.map((item) => (
                         <NavLink

@@ -115,7 +115,7 @@ test('logout in a Flutter host with an injected wallet clears the cached wallet 
     assert.equal(storage.getItem('WALLET_ADDRESS'), null)
 })
 
-test('auth API keeps the old password and DApp login contracts in one feature module', async () => {
+test('auth API maps password and DApp login to the configured backend contracts', async () => {
     const [apiSource, configSource, typesSource] = await Promise.all([
         readFile(new URL('../src/features/auth/api.ts', import.meta.url), 'utf8'),
         readFile(new URL('../src/features/auth/config.ts', import.meta.url), 'utf8'),
@@ -123,7 +123,7 @@ test('auth API keeps the old password and DApp login contracts in one feature mo
     ])
 
     assert.match(configSource, /passwordLogin:\s*'\/api\/auth\/login'/)
-    assert.match(configSource, /dappLogin:\s*'\/api\/auth\/address_login'/)
+    assert.match(configSource, /dappLogin:\s*'\/api\/auth\/login'/)
     assert.match(apiSource, /AUTH_API_PATH\.passwordLogin/)
     assert.match(apiSource, /AUTH_API_PATH\.dappLogin/)
     assert.match(typesSource, /email/)

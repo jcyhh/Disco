@@ -2,6 +2,7 @@ import activationCardIconUrl from '@/assets/layout/menu/activation-card.png'
 import assetIconUrl from '@/assets/layout/menu/asset.png'
 import homeIconUrl from '@/assets/layout/menu/home.png'
 import inviteIconUrl from '@/assets/layout/menu/invite.png'
+import purchaseCardIconUrl from '@/assets/layout/menu/purchase-card.png'
 import reservationIconUrl from '@/assets/layout/menu/reservation.png'
 import teamIconUrl from '@/assets/layout/menu/team.png'
 import { ROUTE_PATH } from '@/router/routes'
@@ -9,6 +10,7 @@ import { ROUTE_PATH } from '@/router/routes'
 export type MainPageItemPath =
     | typeof ROUTE_PATH.home
     | typeof ROUTE_PATH.reservation
+    | typeof ROUTE_PATH.purchaseCard
     | typeof ROUTE_PATH.activationCard
     | typeof ROUTE_PATH.asset
     | typeof ROUTE_PATH.team
@@ -33,6 +35,12 @@ export const MAIN_PAGE_ITEMS: readonly MainPageItem[] = [
         title: '预约记录',
         icon: reservationIconUrl,
         activeIcon: reservationIconUrl,
+    },
+    {
+        path: ROUTE_PATH.purchaseCard,
+        title: '购买激活卡',
+        icon: purchaseCardIconUrl,
+        activeIcon: purchaseCardIconUrl,
     },
     {
         path: ROUTE_PATH.activationCard,

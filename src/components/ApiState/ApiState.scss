@@ -1,0 +1,13 @@
+.api-state {
+    color: var(--app-content-muted-color);
+
+    &__retry {
+        @include auto-button($height: 64px, $fontSize: 26px);
+
+        margin-inline: auto;
+    }
+
+    &__more {
+        @include full-button($height: 72px, $fontSize: 28px);
+    }
+}

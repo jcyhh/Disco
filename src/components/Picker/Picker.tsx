@@ -190,7 +190,7 @@ export function Picker({
                         type="button"
                         className="picker__close flex-center"
                         onClick={onClose}
-                        aria-label="Close picker"
+                        aria-label={t('关闭选择器')}
                     >
                         <Icon name="cross" className="size-48 opc-6" />
                     </button>

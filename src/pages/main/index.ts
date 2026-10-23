@@ -1,6 +1,7 @@
 export { MAIN_PAGE_ITEMS, type MainPageItem, type MainPageItemPath } from './config.ts'
 export { HomePage } from './home/index.ts'
 export { ReservationPage } from './reservation/index.ts'
+export { PurchaseCardPage } from './purchase-card/index.ts'
 export { ActivationCardPage } from './activation-card/index.ts'
 export { AssetPage } from './asset/index.ts'
 export { TeamPage } from './team/index.ts'

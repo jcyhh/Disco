@@ -1,8 +1,12 @@
 # Shared styles
 公共样式。
 
-Disco uses a light theme configured in `color.scss`: a top-to-bottom `#F8EAFE` to `#F9F9F9` page gradient, `#D11BFF` primary color and black default text. Pages inherit the viewport background; shared cards, navigation, dialogs, borders and loading indicators consume the theme variables. Keep the browser theme metadata in `index.html` aligned when changing the overall color scheme.
-Disco 的亮色主题统一配置在 `color.scss`：页面背景由上到下从 `#F8EAFE` 渐变至 `#F9F9F9`，主题色为 `#D11BFF`，默认文字为黑色。页面继承视口背景，公共卡片、导航、弹窗、边框和加载指示器读取主题变量。切换整体主题时，同步更新 `index.html` 中的浏览器主题元数据。
+`interaction.scss` 统一按钮、链接和按钮角色控件的点触反馈：按住时轻微缩小并压暗，松开恢复。没有按钮语义的既有可点击图标/品牌区使用 `tap-target` 复用。禁用、`aria-disabled`、`aria-busy` 控件不触发按压效果；系统减少动态效果模式仅保留即时明暗反馈。独立 `scale` 属性与内容入场的 `transform` 互不覆盖，按钮默认皮肤、尺寸及业务逻辑不变。
+
+一级业务页的内容入场动画集中在 `animate.scss`，配合 `usePageReveal` 和 `data-reveal` 标记使用。只动画 `opacity` 和 `transform`，采用有限时长及短错峰；系统减少动态效果设置下不隐藏内容、不播放新增入场动画。Header、侧栏与弹窗沿用原有结构和动画。
+
+Disco uses a light theme configured in `color.scss`: a top-to-bottom `#F8EAFE` to `#F9F9F9` page gradient, `#D11BFF` primary color and black default text. The page gradient occupies 800 design pixels and scrolls with the page, with the solid end color below it; shared cards, navigation, dialogs, borders and loading indicators consume the theme variables. Keep the browser theme metadata in `index.html` aligned when changing the overall color scheme.
+Disco 的亮色主题统一配置在 `color.scss`：页面背景由上到下从 `#F8EAFE` 渐变至 `#F9F9F9`，主题色为 `#D11BFF`，默认文字为黑色。页面渐变范围统一为 800 设计像素，随页面滚动，下面延续底色，公共卡片、导航、弹窗、边框和加载指示器读取主题变量。切换整体主题时，同步更新 `index.html` 中的浏览器主题元数据。
 
 Write page styles in SCSS and compose existing utility classes in JSX before adding private declarations. `pnpm stylelint` rejects declarations already represented by global utilities; `pnpm lint:tsx-styles` rejects JSX inline styles. Both checks skip `src/vendor` and `src/third-party`.
 页面使用 SCSS，新增私有声明前先在 JSX 组合现有工具类。`pnpm stylelint` 拦截已有工具类对应的重复声明，`pnpm lint:tsx-styles` 拦截 JSX 内联样式。两类规则都排除 `src/vendor` 和 `src/third-party`。
@@ -43,3 +47,5 @@ Compose optional skins with either structure: `full-btn btn-solid`, `auto-btn bt
 
 Popup gradient-card tokens represent background images. Keep `--app-popup-gradient-card-bg` and `--app-popup-gradient-card-border` as gradients, including two identical stops for a solid appearance, because the mixin uses multiple background layers.
 Popup 渐变卡片变量代表背景图像。`--app-popup-gradient-card-bg` 和 `--app-popup-gradient-card-border` 必须保持渐变；需要纯色效果时使用两个相同颜色的色标，因为 mixin 会将它们组成多层背景。
+
+`--app-page-bg-height: 800px` 统一维护页面渐变高度，沿用 750px 设计稿及现有 PostCSS 视口换算。`page-background($top)` 复用底色、渐变尺寸、偏移和不重复/随页面滚动的规则。一级布局从 Header 下方（88px + 顶部安全区）开始；公告等二级页使用 `secondary-page-background min-vh-100`，从 SecondaryHeader 下方（100px + 顶部安全区）开始；无导航的流程页从顶部开始。页面长短不拉伸渐变，800px 后保持 `#F9F9F9`。侧边栏自身背景和页面专属切图不属于页面背景层，保留已确认样式。

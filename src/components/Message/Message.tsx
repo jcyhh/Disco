@@ -1,4 +1,10 @@
-import { Icon } from '../Icon/index.ts'
+import { useTranslation } from 'react-i18next'
+import closeIcon from '@/assets/message/message-close.png'
+import failIcon from '@/assets/message/message-fail.png'
+import infoIcon from '@/assets/message/message-info.png'
+import successIcon from '@/assets/message/message-success.png'
+import warningIcon from '@/assets/message/message-warning.png'
+
 import type { MessageType } from './message.ts'
 
 export interface MessageToastProps {
@@ -8,13 +14,58 @@ export interface MessageToastProps {
     onClose: () => void
 }
 
-export function MessageToast({ message, type, isLeaving = false, onClose }: MessageToastProps) {
+const MESSAGE_ICON_SRC: Record<MessageType, string> = {
+    success: successIcon,
+    info: infoIcon,
+    fail: failIcon,
+    warning: warningIcon,
+}
+
+export function MessageToast({
+    message,
+    type,
+    isLeaving = false,
+    onClose,
+}: MessageToastProps) {
+    const { t } = useTranslation()
+    const animationClassName = isLeaving
+        ? 'animate__zoomOut'
+        : 'animate__slideInUp'
+
+    const toastClassName = [
+        'message-toast',
+        `message-toast--${type}`,
+        'animate__animated',
+        animationClassName,
+        'ani-5',
+    ].join(' ')
+
     return (
-        <div className={['message-toast', `message-toast--${type}`, 'animate__animated ani-5', isLeaving ? 'animate__fadeOut' : 'animate__fadeIn'].join(' ')} role="status" aria-live="polite">
+        <div
+            className={toastClassName}
+            role="status"
+            aria-live="polite"
+        >
             <div className="message-toast__box flex items-center pt-24 pr-26 pb-24 pl-26">
-                <span className="message-toast__text flex-1 size-24 lh-34 word-break">{message}</span>
-                <button className="message-toast__close flex-center ml-20 flex-none" type="button" aria-label="Close message" onClick={onClose}>
-                    <Icon name="cross" className="size-24" />
+                <img
+                    className="message-toast__icon mr-20 flex-none"
+                    src={MESSAGE_ICON_SRC[type]}
+                    alt=""
+                />
+                <span className="message-toast__text flex-1 size-24 lh-34 word-break">
+                    {message}
+                </span>
+                <button
+                    className="message-toast__close flex-center ml-20 flex-none"
+                    type="button"
+                    aria-label={t('关闭提示')}
+                    onClick={onClose}
+                >
+                    <img
+                        className="message-toast__close-icon"
+                        src={closeIcon}
+                        alt=""
+                    />
                 </button>
             </div>
         </div>

@@ -1,3 +1,12 @@
+@mixin page-background($top: 0px) {
+    background-color: var(--app-page-bg-end);
+    background-image: var(--app-page-bg);
+    background-repeat: no-repeat;
+    background-size: 100% var(--app-page-bg-height);
+    background-position: 0 $top;
+    background-attachment: scroll;
+}
+
 @mixin gradient-card(
     $radius,
     $bg: var(--app-popup-gradient-card-bg),

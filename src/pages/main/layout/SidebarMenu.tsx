@@ -36,14 +36,14 @@ export function SidebarMenu({
             position="left"
             contentPreset={false}
         >
-            <aside className="app-sidebar-menu vh-100" aria-label="Sidebar menu">
+            <aside className="app-sidebar-menu vh-100" aria-label={t('侧边菜单')}>
                 <div className="flex-between">
                     <AppBrand
                         showName={false}
                         logoVariant="wordmark"
                         onClick={handleCloseSidebarBrandClick}
                     />
-                    <Icon name="cross" className="size-48 opc-6" onClick={onClose} />
+                    <Icon name="cross" className="tap-target size-48 opc-6" onClick={onClose} />
                 </div>
                 <nav className="app-menu scroll-y mt-60">
                     {MAIN_PAGE_ITEMS.map((item) => (

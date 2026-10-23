@@ -60,7 +60,7 @@ function LanguageSwitchContent({
         .filter(Boolean)
         .join(' ')
     const triggerContent = children === undefined ? (
-        <img src={languageIconUrl} className="language-switch__default" alt="Language" />
+        <img src={languageIconUrl} className="language-switch__default" alt={t('切换语言')} />
     ) : children
 
     function openLanguageSwitch() {

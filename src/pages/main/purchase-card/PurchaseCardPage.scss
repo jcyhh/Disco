@@ -1,0 +1,117 @@
+.purchase-card-page {
+    color: var(--app-content-text-color);
+
+    &__options {
+        min-width: 0;
+        padding: 0;
+        border: 0;
+    }
+
+    &__option {
+        position: relative;
+        cursor: pointer;
+    }
+
+    &__radio {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+
+        &:focus-visible + .purchase-card-page__card {
+            outline: 2px solid var(--app-color);
+            outline-offset: 4px;
+        }
+    }
+
+    &__card {
+        position: relative;
+        grid-template-columns: 166px minmax(0, 1fr);
+        min-height: 206px;
+        padding: 20px;
+        border-radius: 20px;
+        background: var(--app-card-bg);
+        overflow: hidden;
+    }
+
+    &__decoration {
+        position: absolute;
+        top: 0;
+        right: 20px;
+        width: 161px;
+        height: 180px;
+        pointer-events: none;
+    }
+
+    &__art {
+        position: relative;
+        width: 166px;
+        height: 166px;
+        border-radius: 20px;
+        object-fit: cover;
+    }
+
+    &__info {
+        position: relative;
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    &__indicator {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+    }
+
+    &__muted {
+        color: var(--app-content-muted-color);
+    }
+
+    &__price {
+        color: var(--app-color);
+    }
+
+    &__quantity-label::before {
+        content: '';
+        width: 8px;
+        height: 32px;
+        flex: none;
+        border-radius: 999px;
+        background: var(--app-btn-bg);
+    }
+
+    &__stepper {
+        min-height: 88px;
+        padding: 10px;
+        border-radius: 999px;
+        background: var(--app-card-bg);
+        box-shadow: var(--app-content-shadow);
+    }
+
+    &__minus {
+        width: 68px;
+        height: 68px;
+        border-radius: 999px;
+        background: #F3F3F5;
+        color: var(--app-text-color);
+        line-height: 1;
+    }
+
+    &__plus {
+        @include auto-button($height: 68px, $padding: 0, $fontSize: 40px, $fontWeight: 400);
+
+        width: 68px;
+    }
+
+    &__quantity {
+        min-width: 0;
+        width: 100%;
+        padding: 0 10px;
+        border: 0;
+        background: transparent;
+    }
+
+    &__submit {
+        @include full-button($height: 88px);
+    }
+}

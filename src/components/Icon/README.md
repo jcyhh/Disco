@@ -38,6 +38,7 @@ Current built-in icons are copied from the Vant iconfont glyphs used by the old 
 - `scan`
 - `copy`
 - `loading`
+- `plus`：几何居中的加号，用于数量按钮，避免文字字形基线导致偏移。
 
 ```ts
 export const ICON_DEFINITIONS = {

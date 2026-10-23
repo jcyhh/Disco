@@ -66,21 +66,49 @@
 
     &__exploration-header {
         position: relative;
-        height: 200px;
+        min-height: 200px;
         border-radius: 20px 20px 0 0;
         overflow: hidden;
     }
 
     &__exploration-banner {
+        position: absolute;
+        inset: 0;
         width: 100%;
-        height: 200px;
+        height: 100%;
         object-fit: cover;
     }
 
-    &__hero-copy {
+    &__exploration-wordmark {
         position: absolute;
-        top: 40px;
-        left: 30px;
+        top: 37px;
+        left: 388px;
+        width: 153.669px;
+        height: 87.035px;
+    }
+
+    &__exploration-wordmark-art {
+        position: relative;
+        width: 145.037px;
+        height: 63.454px;
+        overflow: hidden;
+        mix-blend-mode: hard-light;
+        transform: rotate(-9.72deg);
+
+        img {
+            position: absolute;
+            top: -13.19%;
+            left: -2.16%;
+            width: 103.12%;
+            height: 117.86%;
+            max-width: none;
+        }
+    }
+
+    &__hero-copy {
+        position: relative;
+        max-width: 328px;
+        overflow-wrap: anywhere;
     }
 
     &__hero-title {
@@ -96,9 +124,37 @@
     }
 
     &__exploration-body {
+        position: relative;
+        isolation: isolate;
         padding: 30px;
         border-radius: 0 0 20px 20px;
-        background: var(--app-card-bg) url('@/assets/home/exploration-background.webp') top center / 100% 232px no-repeat;
+        background: var(--app-card-bg);
+    }
+
+    &__exploration-backdrop {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 232px;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            top: 0;
+            left: -5.24%;
+            width: 105.23%;
+            height: 100%;
+            max-width: none;
+        }
+
+        &::after {
+            position: absolute;
+            inset: 0;
+            content: '';
+            background: linear-gradient(189.446515deg, rgb(255 255 255 / 0%) 23.871%, var(--app-card-bg) 67.745%);
+        }
     }
 
     &__verified {
@@ -123,16 +179,31 @@
         -webkit-background-clip: text;
     }
 
+    &__switch-amount {
+        @include auto-button();
+    }
+
     &__facts {
-        height: 136px;
-        padding: 28px 30px;
+        min-height: 136px;
+        padding: 27px 29px;
         border: 1px solid var(--app-content-box-border);
         border-radius: 20px;
         background: var(--app-content-box-bg);
     }
 
-    &__fact + &__fact {
-        border-left: 1px solid var(--app-content-box-border);
+    &__fact {
+        position: relative;
+        min-width: 0;
+    }
+
+    &__fact + &__fact::before {
+        position: absolute;
+        top: 0;
+        left: -23px;
+        width: 1px;
+        height: 80px;
+        content: '';
+        background: var(--app-content-divider-color);
     }
 
     &__card-count {
@@ -158,7 +229,7 @@
         width: 100%;
         height: 200px;
         border-radius: 20px;
-        object-fit: cover;
+        object-position: bottom;
     }
 
     &__about-heading {
@@ -195,7 +266,7 @@
     }
 
     &__overview-item {
-        height: 126px;
+        min-height: 126px;
         padding: 20px;
         border-radius: 16px;
         background: var(--app-content-box-bg);
@@ -209,9 +280,31 @@
     }
 
     &__deflation-banner {
-        width: 100%;
-        height: 80px;
-        object-fit: cover;
+        position: absolute;
+        top: -50.2%;
+        left: -1.26%;
+        width: 112.19%;
+        height: 329.38%;
+        max-width: none;
+    }
+
+    &__deflation-token {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 86px;
+        height: 77px;
+        border-radius: 38.5px;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            top: -15.49%;
+            left: -11.39%;
+            width: 116.46%;
+            height: 129.58%;
+            max-width: none;
+        }
     }
 
     &__deflation-content {
@@ -239,8 +332,5 @@
         color: var(--app-content-muted-color);
     }
 
-    &__announcement-copy {
-        white-space: pre-line;
-    }
 }
 

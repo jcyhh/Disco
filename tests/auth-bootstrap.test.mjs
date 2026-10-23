@@ -113,7 +113,7 @@ test('a changed wallet blocks old authenticated APIs and splash relogs within th
         assert.equal(signatures, 1)
         assert.equal(getToken(), 'fresh-token')
         assert.equal(useUserStore.getState().isSessionReady, true)
-        assert.deepEqual(urls, ['/api/auth/address_login'])
+        assert.deepEqual(urls, ['/api/auth/login'])
     } finally {
         APP_CONFIG.loginMode = previousMode
         httpClient.defaults.adapter = previousAdapter

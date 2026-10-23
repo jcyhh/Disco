@@ -3,9 +3,25 @@
  * 当前项目已确认会用到的用户字段。
  */
 export interface UserProfile {
-    id?: string | number
-    finance_level?: string | number | null
-    // TODO(user): Complete stable fields from the backend contract and gradually reduce unknown usage.
-    // TODO(user): 根据后端接口文档补全稳定字段，逐步减少 unknown 的使用。
-    [key: string]: unknown
+    id: number
+    address: string
+    team_count: number
+    kpi: string
+    team_kpi: string
+    referral_code: string
+    referral_count: number
+    valid_referral_count: number
+    usdt_balance: string
+}
+
+export interface ReferralUser extends Omit<UserProfile, 'valid_referral_count' | 'usdt_balance'> {
+    created_at: string
+}
+
+export interface BalanceLog {
+    id: number
+    is_inc: 0 | 1
+    amount: string
+    content: string
+    created_at: string
 }

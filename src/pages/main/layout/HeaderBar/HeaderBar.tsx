@@ -49,10 +49,10 @@ export function HeaderBar({
                             <button
                                 type="button"
                                 className="app-header-bar__menu flex-none mr-20"
-                                aria-label="Menu"
+                                aria-label={t('菜单')}
                                 onClick={onSidebarMenuClick}
                             >
-                                <img src={headerMenuUrl} className="img-40" alt="Menu" />
+                                <img src={headerMenuUrl} className="img-40" alt="" />
                             </button>
                         ) : null}
                         <AppBrand showName={false} logoVariant="wordmark" />

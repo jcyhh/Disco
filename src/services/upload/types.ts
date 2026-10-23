@@ -10,6 +10,7 @@ export interface SelectImageOptions {
 
 export interface UploadFileOptions {
     file: File
+    signal?: AbortSignal
     url?: string
     fieldName?: string
     fields?: Record<string, string | Blob>

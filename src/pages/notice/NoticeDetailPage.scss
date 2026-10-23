@@ -1,0 +1,41 @@
+@use '@/styles/mixins' as *;
+
+.notice-detail-page {
+    color: var(--app-content-text-color);
+
+    &__card {
+        min-width: 0;
+        box-shadow: var(--app-content-shadow);
+    }
+
+    &__title,
+    &__content {
+        overflow-wrap: anywhere;
+    }
+
+    &__date {
+        display: block;
+    }
+
+    &__content {
+        border-top: 1px solid var(--app-content-divider-color);
+        color: var(--app-text-color);
+        white-space: pre-wrap;
+        -webkit-user-select: text;
+        user-select: text;
+    }
+
+    &__muted {
+        color: var(--app-content-muted-color);
+    }
+
+    &__retry {
+        @include auto-button($height: 64px, $fontSize: 26px);
+
+        margin-inline: auto;
+    }
+
+    &__back {
+        @include full-button($height: 72px, $fontSize: 28px);
+    }
+}

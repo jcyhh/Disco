@@ -1,5 +1,7 @@
 import type {
     Abi,
+    ContractFunctionName,
+    ContractFunctionReturnType,
     Address,
     TransactionReceipt,
 } from 'viem'
@@ -25,13 +27,17 @@ import type {
     DappContractWriteParams,
 } from './types.ts'
 
-export async function readDappContract<TResult = unknown, TAbi extends Abi = Abi>({
+export function readDappContract<
+    const TAbi extends Abi,
+    TName extends ContractFunctionName<TAbi, 'view' | 'pure'>,
+>(params: DappContractReadParams<TAbi, TName>): Promise<ContractFunctionReturnType<TAbi, 'view' | 'pure', TName>>
+export async function readDappContract({
     address,
     abi,
     functionName,
     args = [],
     account,
-}: DappContractReadParams<TAbi>): Promise<TResult> {
+}: DappContractReadParams): Promise<unknown> {
     const walletClient = getDappWalletClient()
 
     const result = await walletClient.readContract({
@@ -40,19 +46,23 @@ export async function readDappContract<TResult = unknown, TAbi extends Abi = Abi
         functionName,
         args,
         ...(account === undefined ? {} : { account }),
-    } as any) as TResult
+    })
 
     logDappContractDiagnostic('read', { address, functionName, args, result })
     return result
 }
 
-export async function estimateDappContractGas<TAbi extends Abi = Abi>({
+export function estimateDappContractGas<
+    const TAbi extends Abi,
+    TName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
+>(params: DappContractWriteParams<TAbi, TName>): Promise<bigint>
+export async function estimateDappContractGas({
     address,
     abi,
     functionName,
     args = [],
     value,
-}: DappContractWriteParams<TAbi>): Promise<bigint> {
+}: DappContractWriteParams): Promise<bigint> {
     const walletClient = getDappWalletClient()
     const account = await getConnectedDappAddress()
 
@@ -63,10 +73,14 @@ export async function estimateDappContractGas<TAbi extends Abi = Abi>({
         args,
         account,
         value,
-    } as any)
+    })
 }
 
-export async function writeDappContract<TAbi extends Abi = Abi>({
+export function writeDappContract<
+    const TAbi extends Abi,
+    TName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
+>(params: DappContractWriteParams<TAbi, TName>): Promise<TransactionReceipt>
+export async function writeDappContract({
     address,
     abi,
     functionName,
@@ -74,13 +88,17 @@ export async function writeDappContract<TAbi extends Abi = Abi>({
     gas,
     gasPrice,
     value,
-}: DappContractWriteParams<TAbi>): Promise<TransactionReceipt> {
+    account: expectedAccount,
+}: DappContractWriteParams): Promise<TransactionReceipt> {
     return runDappContractWorkflow(async () => {
         await checkDappGasBalance()
 
         try {
             const walletClient = getDappWalletClient()
             const account = await getConnectedDappAddress()
+            if (expectedAccount && expectedAccount.toLowerCase() !== account.toLowerCase()) {
+                throw new Error(translateDappErrorMessage(DAPP_ERROR_MESSAGE.walletAddressUnavailable))
+            }
             const hash = await walletClient.writeContract({
                 address,
                 abi,
@@ -90,7 +108,7 @@ export async function writeDappContract<TAbi extends Abi = Abi>({
                 gas,
                 gasPrice,
                 value,
-            } as any)
+            })
             const receipt = await walletClient.waitForTransactionReceipt({ hash })
 
             if (receipt.status === 'reverted') {
@@ -105,8 +123,12 @@ export async function writeDappContract<TAbi extends Abi = Abi>({
     })
 }
 
-export async function writeDappContractWithGas<TAbi extends Abi = Abi>(
-    params: DappContractWriteParams<TAbi>,
+export function writeDappContractWithGas<
+    const TAbi extends Abi,
+    TName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
+>(params: DappContractWriteParams<TAbi, TName>): Promise<TransactionReceipt>
+export async function writeDappContractWithGas(
+    params: DappContractWriteParams,
 ): Promise<TransactionReceipt> {
     return runDappContractWorkflow(async () => {
         if (!shouldEstimateDappGas()) {
@@ -140,10 +162,8 @@ export async function checkDappGasBalance(
     return balance
 }
 
-export function createDappContractActions<TAbi extends Abi>(
-    address: Address,
-    abi: TAbi,
-): DappContractActions {
+export function createDappContractActions<const TAbi extends Abi>(address: Address, abi: TAbi): DappContractActions<TAbi>
+export function createDappContractActions(address: Address, abi: Abi): DappContractActions {
     return {
         read(functionName, args = [], options: DappContractReadOptions = {}) {
             return readDappContract({

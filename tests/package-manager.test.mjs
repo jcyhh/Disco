@@ -34,7 +34,7 @@ test('template uses pnpm as the package manager', () => {
     assert.match(readme, /pnpm test/)
     assert.match(readme, /pnpm lint/)
 
-    assert.match(agentRules, /pnpm test/)
+    assert.match(agentRules, /pnpm verify/)
     assert.match(agentRules, /pnpm build/)
     assert.match(agentRules, /pnpm lint/)
     assert.match(agentRules, /Do not ask which package manager/i)

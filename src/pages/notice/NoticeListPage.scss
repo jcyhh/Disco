@@ -1,0 +1,34 @@
+@use '@/styles/mixins' as *;
+
+.notice-list-page {
+    color: var(--app-content-text-color);
+
+    &__card {
+        min-width: 0;
+        box-shadow: var(--app-content-shadow);
+    }
+
+    &__title,
+    &__excerpt {
+        overflow-wrap: anywhere;
+    }
+
+    &__excerpt {
+        color: var(--app-secondary-text-color);
+        white-space: pre-wrap;
+    }
+
+    &__muted {
+        color: var(--app-content-muted-color);
+    }
+
+    &__load-more {
+        @include full-button($height: 72px, $fontSize: 28px);
+    }
+
+    &__retry {
+        @include auto-button($height: 64px, $fontSize: 26px);
+
+        margin-inline: auto;
+    }
+}

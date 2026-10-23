@@ -214,6 +214,9 @@ Use `@/services/...`, `@/shared/...`, `@/router/...`, `@/assets/...` instead.
 ## Page modules
 ## 页面模块
 
+Implement the supplied designs and explicitly requested features. An API endpoint alone does not authorize a new page, entry or business flow. Without a design, only add clearly required, undisputed supporting pages such as announcement lists and details; do not infer profile or withdrawal-history pages from the API document.
+按已有设计和开发者明确要求实现功能，接口文档中存在某个接口，不代表可以新增对应页面、入口或业务流程。没有设计时，只补公告列表、公告详情这类明确存在且无争议的配套页面；不要根据接口文档自行扩展个人资料、提取记录等页面。
+
 Treat each route page as a small module directory.
 把每个路由页面当成一个小模块目录。
 
@@ -237,8 +240,8 @@ The developer has confirmed the current shared UI as the project baseline. Later
 
 - Keep the current Header layout, dimensions, left menu button, wordmark without app-name text, and wallet-status treatment.
 - 保持当前 Header 的布局、尺寸、位于 Logo 左侧的菜单按钮、无名称文案的横版 Logo 及钱包状态展示。
-- Keep the left-opening sidebar, its matching wordmark, and the six menu entries in their confirmed order: 首页、预约记录、我的激活卡、我的资产、团队、邀请好友. Preserve the supplied full-color icons and their first-level routes/directories.
-- 保持从左侧弹出的侧边栏及与 Header 一致的品牌区，保持六个菜单的顺序：首页、预约记录、我的激活卡、我的资产、团队、邀请好友；保留已提供的彩色图标及对应一级路由、目录。
+- Keep the left-opening sidebar, its matching wordmark, and the seven menu entries in their confirmed order: 首页、预约记录、购买激活卡、我的激活卡、我的资产、团队、邀请好友. Preserve the supplied full-color icons and their first-level routes/directories.
+- 保持从左侧弹出的侧边栏及与 Header 一致的品牌区，保持七个菜单的顺序：首页、预约记录、购买激活卡、我的激活卡、我的资产、团队、邀请好友；保留已提供的彩色图标及对应一级路由、目录。
 - Keep the original single-icon language switch and its interaction. Do not adopt a reference's language text, arrow or capsule.
 - 多语言开关保持原单图标样式与交互，不随参考图改成文字、箭头或胶囊控件。
 - Keep the confirmed light theme, page background, default text and primary-button gradient, white text and inset glow. New page buttons reuse the existing skin and may set their own size, padding and radius through the mixins; do not change shared defaults to match one page.

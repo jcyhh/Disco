@@ -49,8 +49,8 @@ test('splash page translates welcome copy and reuses the shared loading icon', a
         'utf8',
     )
 
-    assert.match(source, /APP_CONFIG\.routeBase/)
-    assert.match(source, /brand\/app-logo\.png/)
+    assert.match(source, /import splashLogoUrl from '@\/assets\/splash\/splash-logo\.(?:png|webp)'/)
+    assert.match(source, /src=\{splashLogoUrl\}/)
     assert.match(source, /APP_CONFIG\.name/)
     assert.match(source, /t\('欢迎来到\{\{name\}\}', \{ name: APP_CONFIG\.name \}\)/)
     assert.match(source, /useTranslation/)

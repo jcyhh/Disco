@@ -125,10 +125,6 @@
         color: #DBA5FF;
     }
 
-    &__copy-link {
-        @include auto-button($height: 60px, $radius: 16px, $padding: 15px);
-    }
-
     &__save {
         @include full-button($height: 88px);
     }
@@ -156,16 +152,4 @@
         }
     }
 
-    &__poster-preview {
-        display: block;
-        width: 100%;
-        height: auto;
-        max-height: 65vh;
-        max-height: 65dvh;
-        object-fit: contain;
-    }
-
-    &__download {
-        @include full-button($height: 72px, $fontSize: 28px);
-    }
 }

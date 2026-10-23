@@ -2,7 +2,7 @@ import { translate } from '../../i18n/index.ts'
 
 export const AUTH_API_PATH = {
     passwordLogin: '/api/auth/login',
-    dappLogin: '/api/auth/address_login',
+    dappLogin: '/api/auth/login',
 } as const
 
 export const AUTH_ERROR_MESSAGE = {

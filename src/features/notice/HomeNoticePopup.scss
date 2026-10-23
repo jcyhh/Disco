@@ -1,0 +1,23 @@
+.home-notice-popup {
+    color: var(--app-content-text-color);
+
+    &__title {
+        overflow-wrap: anywhere;
+    }
+
+    &__date {
+        color: var(--app-content-muted-color);
+    }
+
+    &__content {
+        min-height: 200px;
+        max-height: 360px;
+        color: var(--app-text-color);
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    &__dismiss {
+        @include full-button($height: 72px, $fontSize: 28px);
+    }
+}

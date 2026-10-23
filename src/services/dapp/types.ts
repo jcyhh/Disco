@@ -2,6 +2,11 @@ import type {
     Abi,
     Address,
     Chain,
+    AbiStateMutability,
+    ContractFunctionArgs,
+    ContractFunctionName,
+    ContractFunctionParameters,
+    ContractFunctionReturnType,
     Hash,
     TransactionReceipt,
 } from 'viem'
@@ -33,59 +38,67 @@ export interface DappWalletListenerOptions {
     onChainChanged?: (chainId: number | undefined) => void
 }
 
-export interface DappContractBaseParams<TAbi extends Abi = Abi> {
-    address: Address
-    abi: TAbi
-    functionName: string
-    args?: readonly unknown[]
-}
+export type DappContractBaseParams<
+    TAbi extends Abi = Abi,
+    TMutability extends AbiStateMutability = AbiStateMutability,
+    TName extends ContractFunctionName<TAbi, TMutability> = ContractFunctionName<TAbi, TMutability>,
+> = ContractFunctionParameters<TAbi, TMutability, TName>
 
 export interface DappContractReadOptions {
     account?: Address
 }
 
-export interface DappContractReadParams<TAbi extends Abi = Abi>
-    extends DappContractBaseParams<TAbi>,
-        DappContractReadOptions {}
+export type DappContractReadParams<
+    TAbi extends Abi = Abi,
+    TName extends ContractFunctionName<TAbi, 'view' | 'pure'> = ContractFunctionName<TAbi, 'view' | 'pure'>,
+> = DappContractBaseParams<TAbi, 'view' | 'pure', TName> & DappContractReadOptions
 
 export interface DappContractWriteOptions {
+    // Optional expected sender. Abort rather than spending from a changed wallet.
+    account?: Address
     gas?: bigint
     gasPrice?: bigint
     value?: bigint
 }
 
-export interface DappContractWriteParams<TAbi extends Abi = Abi>
-    extends DappContractBaseParams<TAbi>,
-        DappContractWriteOptions {}
+export type DappContractWriteParams<
+    TAbi extends Abi = Abi,
+    TName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'> = ContractFunctionName<TAbi, 'nonpayable' | 'payable'>,
+> = DappContractBaseParams<TAbi, 'nonpayable' | 'payable', TName> & DappContractWriteOptions
 
-export interface DappContractActions {
-    read<TResult = unknown>(
-        functionName: string,
-        args?: readonly unknown[],
-        options?: DappContractReadOptions,
-    ): Promise<TResult>
-    write(
-        functionName: string,
-        args?: readonly unknown[],
-        options?: DappContractWriteOptions,
+type ActionArguments<
+    TAbi extends Abi,
+    TMutability extends AbiStateMutability,
+    TName extends ContractFunctionName<TAbi, TMutability>,
+    TOptions,
+> = readonly [] extends ContractFunctionArgs<TAbi, TMutability, TName>
+    ? [args?: ContractFunctionArgs<TAbi, TMutability, TName>, options?: TOptions]
+    : [args: ContractFunctionArgs<TAbi, TMutability, TName>, options?: TOptions]
+
+export interface DappContractActions<TAbi extends Abi = Abi> {
+    read<TName extends ContractFunctionName<TAbi, 'view' | 'pure'>>(
+        functionName: TName,
+        ...params: ActionArguments<TAbi, 'view' | 'pure', TName, DappContractReadOptions>
+    ): Promise<ContractFunctionReturnType<TAbi, 'view' | 'pure', TName>>
+    write<TName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>>(
+        functionName: TName,
+        ...params: ActionArguments<TAbi, 'nonpayable' | 'payable', TName, DappContractWriteOptions>
     ): Promise<TransactionReceipt>
-    writeWithGas(
-        functionName: string,
-        args?: readonly unknown[],
-        options?: Omit<DappContractWriteOptions, 'gas'>,
+    writeWithGas<TName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>>(
+        functionName: TName,
+        ...params: ActionArguments<TAbi, 'nonpayable' | 'payable', TName, Omit<DappContractWriteOptions, 'gas'>>
     ): Promise<TransactionReceipt>
-    estimateGas(
-        functionName: string,
-        args?: readonly unknown[],
-        options?: Pick<DappContractWriteOptions, 'value'>,
+    estimateGas<TName extends ContractFunctionName<TAbi, 'nonpayable' | 'payable'>>(
+        functionName: TName,
+        ...params: ActionArguments<TAbi, 'nonpayable' | 'payable', TName, Pick<DappContractWriteOptions, 'value'>>
     ): Promise<bigint>
 }
 
-export interface DappBatchCall<TAbi extends Abi = Abi> {
+export type DappBatchCall<
+    TAbi extends Abi = Abi,
+    TName extends ContractFunctionName<TAbi> = ContractFunctionName<TAbi>,
+> = Omit<ContractFunctionParameters<TAbi, AbiStateMutability, TName>, 'address'> & {
     to: Address
-    abi: TAbi
-    functionName: string
-    args?: readonly unknown[]
     value?: `0x${string}`
 }
 

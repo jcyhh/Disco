@@ -1,12 +1,10 @@
 import type { Banner } from '@/features/banner/types.ts'
+import type { Notice } from '@/features/notice/types.ts'
 
 import bannerUrl from './assets/banner.webp'
+import { mockNotices } from './notice.ts'
 
-export interface MockHomeAnnouncement {
-    id: string
-    title: string
-    content: string
-}
+export type MockHomeAnnouncement = Notice
 
 export const mockHomeBanners: readonly Banner[] = [
     { id: 'home-banner-1', img_url: bannerUrl },
@@ -14,23 +12,7 @@ export const mockHomeBanners: readonly Banner[] = [
     { id: 'home-banner-3', img_url: bannerUrl },
 ]
 
-export const mockHomeAnnouncements: readonly MockHomeAnnouncement[] = [
-    {
-        id: 'launch',
-        title: '[disco] 正式上线！',
-        content: '[disco] 正式上线！亲爱的用户：为了给您提供更加优质、便捷、丰富的功能，欢迎体验 Disco。',
-    },
-    {
-        id: 'welcome',
-        title: '欢迎来到 Disco',
-        content: '欢迎来到 Disco，开启属于你的新体验。',
-    },
-    {
-        id: 'exploration',
-        title: '开启新旅程',
-        content: '每一次参与，获得更多收益。一起探索 Disco 的精彩世界。',
-    },
-]
+export const mockHomeAnnouncements: readonly MockHomeAnnouncement[] = mockNotices.slice(0, 3)
 
 export const mockHomeExploration = {
     round: '第一轮',

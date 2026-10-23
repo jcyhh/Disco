@@ -14,14 +14,14 @@
 - 部署目录：`/h5/`；首页路由：`/home`。
 - Layout menu: `sidebar`, opening from the left; login mode: `dapp` (wallet login).
 - 布局菜单：`sidebar` 侧边栏，从左侧弹出；登录模式：`dapp` 钱包登录。
-- Menu entries and first-level directories under `src/pages/main/`: 首页 (`home/`, `ROUTE_PATH.home` derived from the home configuration), 预约记录 (`reservation/`, `/reservation`), 我的激活卡 (`activation-card/`, `/activation-card`), 我的资产 (`asset/`, `/asset`), 团队 (`team/`, `/team`) and 邀请好友 (`invite/`, `/invite`). The existing `user/` page and `/user` route remain outside the menu.
-- 菜单及 `src/pages/main/` 下的一级目录：首页（`home/`，路径由首页配置推导为 `ROUTE_PATH.home`）、预约记录（`reservation/`，`/reservation`）、我的激活卡（`activation-card/`，`/activation-card`）、我的资产（`asset/`，`/asset`）、团队（`team/`，`/team`）、邀请好友（`invite/`，`/invite`）。原有 `user/` 页面及 `/user` 路由保留，不再出现在菜单中。
-- Supplied menu PNGs are copied unchanged to `src/assets/layout/menu/` with semantic filenames. Icons keep their original colors without brightness filters; selected text uses the theme color. All six menu pages now have static content and local interactions, with page acceptance pending with the user.
-- 用户提供的菜单 PNG 按语义命名原样复制到 `src/assets/layout/menu/`，图标保留原色、不使用亮度滤镜，选中文字使用主题色。六个菜单页面均已实现静态内容与本地交互，待用户页面验收。
+- Menu entries and first-level directories under `src/pages/main/`: 首页 (`home/`, `ROUTE_PATH.home` derived from the home configuration), 预约记录 (`reservation/`, `/reservation`), 购买激活卡 (`purchase-card/`, `/purchase-card`), 我的激活卡 (`activation-card/`, `/activation-card`), 我的资产 (`asset/`, `/asset`), 团队 (`team/`, `/team`) and 邀请好友 (`invite/`, `/invite`). The existing `user/` page and `/user` route remain outside the menu.
+- 菜单及 `src/pages/main/` 下的一级目录：首页（`home/`，路径由首页配置推导为 `ROUTE_PATH.home`）、预约记录（`reservation/`，`/reservation`）、购买激活卡（`purchase-card/`，`/purchase-card`）、我的激活卡（`activation-card/`，`/activation-card`）、我的资产（`asset/`，`/asset`）、团队（`team/`，`/team`）、邀请好友（`invite/`，`/invite`）。原有 `user/` 页面及 `/user` 路由保留，不再出现在菜单中。
+- Supplied menu PNGs are copied unchanged to `src/assets/layout/menu/` with semantic filenames. Icons keep their original colors without brightness filters; selected text uses the theme color. All seven menu pages have implemented layouts and are now using backend APIs where available; acceptance remains with the developer.
+- 用户提供的菜单 PNG 按语义命名原样复制到 `src/assets/layout/menu/`，图标保留原色、不使用亮度滤镜，选中文字使用主题色。七个菜单页面已有页面实现，现进入接口联调，接口支持的部分已切换后端数据，验收由开发者负责。
 - I18n: enabled; development language: `zh-Hans`; production language: `en`.
 - 多语言：启用；开发环境默认简体中文 `zh-Hans`，生产环境默认英文 `en`。
-- Enabled languages: Simplified Chinese, Traditional Chinese and English, as provided by the template.
-- 启用语言：保留模板的简体中文、繁体中文和英文。
+- Enabled languages: Simplified Chinese, English, Korean, Japanese, Russian and Mongolian (Cyrillic), as requested by the developer.
+- 启用语言：简体中文、英文、韩文、日文、俄文、西里尔蒙古文；请求头参考 AIGO，直接传 `zh-Hans` / `en` / `ko` / `ja` / `ru` / `mn`，不做地区代码转换。
 - Production chain: BSC (`viem/chains` `bsc`, chain ID 56).
 - 生产网络：BSC（`viem/chains` 的 `bsc`，链 ID 56）。
 - Contract writes: gas check disabled; gas estimate disabled; insufficient ERC20 allowance uses maximum approval; Token decimals: 18.
@@ -30,89 +30,61 @@
 - 项目 Logo：用户提供的 Disco 横版标识，原图保存在 `public/brand/disco-wordmark.png`（110x48）。
 - App logo: `public/brand/app-logo.png` uses a transparent 110x110 canvas with the original wordmark centered at its original size; favicon is generated with `pnpm favicon:generate`.
 - 应用 Logo：`public/brand/app-logo.png` 在 110x110 透明画布中居中放置原尺寸标识；favicon 使用 `pnpm favicon:generate` 生成。
-- Empty component: retain the template placeholder, following the request to use defaults for the remaining setup items.
-- Empty 组件：根据其余配置采用默认值的要求，保留模板占位图。
-- Theme: light; vertical page gradient from `#F8EAFE` to `#F9F9F9`; primary color `#D11BFF`; default text black. Shared surfaces, controls and browser metadata use the light theme.
-- 主题：亮色；页面由上到下从 `#F8EAFE` 渐变至 `#F9F9F9`；主题色 `#D11BFF`；默认文字为黑色。公共背景、控件和浏览器元数据已适配亮色主题。
+- Empty component: replaced with the supplied purple empty-state artwork (320×320), stored at `src/assets/common/empty.png`; developer-specified display width 160px and height auto.
+- Empty 组件：已替换为用户提供的紫色缺省图（320×320），统一资源为 `src/assets/common/empty.png`，按开发者指定显示宽 160px、高度自适应。
+- Theme: light; vertical page gradient from `#F8EAFE` to `#F9F9F9` over 800 design pixels below the page navigation, followed by solid `#F9F9F9`; primary color `#D11BFF`; default text black. Shared surfaces, controls and browser metadata use the light theme.
+- 主题：亮色；页面从导航下方起，在 800 设计像素内由 `#F8EAFE` 渐变至 `#F9F9F9`，下面延续纯色 `#F9F9F9`；主题色 `#D11BFF`；默认文字为黑色。公共背景、控件和浏览器元数据已适配亮色主题。
 - Shared sizing and buttons follow the [home design reference](https://www.figma.com/design/NVwAAv12WZx1LiCTqPMNWD?node-id=30934-11283), using its 750px draft: Header 88px, menu 40px, wordmark 110x48px, wallet control 56px. The language switch retains its original 52px single-icon trigger and interaction; the Figma language capsule is not applied. The wallet status uses the supplied 32x32 SVG and displays signed-in status during static preview without creating a wallet address.
 - 公共尺寸和按钮参考[首页设计稿](https://www.figma.com/design/NVwAAv12WZx1LiCTqPMNWD?node-id=30934-11283)，沿用 750px 设计基准：Header 高 88px、菜单 40px、横版 Logo 110x48px、钱包控件高 56px。语言开关保留原有 52px 单图标入口与交互，不采用 Figma 胶囊样式。钱包状态使用用户提供的 32x32 SVG，静态预览显示已登录，不伪造钱包地址。
-- Primary buttons use a purple gradient, white text, pill corners and an inset glow; full-width buttons default to 80px tall. Home, reservation records, activation cards, assets, team and invite have static content and local interactions awaiting user page acceptance.
-- 主按钮采用紫色渐变、白字、胶囊圆角和内发光，通栏默认高 80px；首页、预约记录、我的激活卡、我的资产、团队、邀请好友静态内容及本地交互已实现，待用户页面验收。
+- Primary buttons use a purple gradient, white text, pill corners and an inset glow; full-width buttons default to 80px tall. The seven menu pages retain their confirmed visual foundation while API-backed logic is integrated.
+- 主按钮采用紫色渐变、白字、胶囊圆角和内发光，通栏默认高 80px；七个菜单页面保持已确认视觉基础，当前对接接口支持的业务逻辑。
 
-## Static-page progress
-## 静态页面进度
+## Current stage / 当前阶段
 
-The home page includes the activity Banner, announcements, four quick links, exploration and Disco overview. `src/mock/home.ts` owns three same-image Banner entries, announcement text and display values. Shared `BasicCarousel` supports horizontal Banner rotation and vertical announcement rotation; announcement details use a local `Popup`. The reservation action currently navigates to reservation records without submitting business data. See [the home module notes](src/pages/main/home/README.md).
-首页已实现活动 Banner、公告、四个快捷入口、参与探索和认识 Disco。`src/mock/home.ts` 集中维护三个复用同图的 Banner 条目、公告文本和展示数值；共享 `BasicCarousel` 支持 Banner 水平轮播与公告垂直轮播，公告详情使用本地 `Popup`。“立即预约”当前仅跳转预约记录，不提交业务数据。详见[首页模块说明](src/pages/main/home/README.md)。
+开发者已提供接口文档、主机并明确要求进入接口对接，测试由开发者承担。补充页面仅限公告列表、公告详情等明确存在且无争议的配套内容；不根据接口文档自行扩展设计中没有的页面或入口。此授权替代先等待静态页验收的旧推进约定，不代表 AI 已验收页面。
 
-Reservation records use local mock data from `src/mock/reservation.ts`: queued 4, active 3, selling 3 and completed 3. Card fields vary by status, and completed earnings reduction is optional. Shared USDT assets, cards and button skins are reused. `SegmentedTabs variant="pills"` supports long-text horizontal scrolling and keeps the selected tab visible; all three enabled languages are populated. Selling opens a local confirmation dialog whose confirmation only closes it, without changing order state or calling API/RPC. No fake refresh handler is registered. See [the reservation module notes](src/pages/main/reservation/README.md).
-预约记录使用 `src/mock/reservation.ts` 本地数据：排队中 4 条、进行中 3 条、卖出中 3 条、已完成 3 条。卡片字段随状态变化，已完成的收益减少为可选项；复用 USDT 资源入口、卡片和按钮皮肤。`SegmentedTabs variant="pills"` 支持长文本横向滚动并让选中项可见，三种已启用语言词条均已补齐。卖出仅打开本地确认弹窗，确认后关闭，不改变订单状态、不触发 API/RPC，也不注册虚假刷新函数。详见[预约记录模块说明](src/pages/main/reservation/README.md)。
+1. 静态页面：已有七个菜单页面和公告链路，保留现有视觉基线。
+2. API 文档与集中封装：已按 `docs/api/frontend-api.md` 完成，方法在 `src/features/`，上传复用共享服务。
+3. 合约：已根据开发者提供的 `localhost.json` 接入，链 ID 31337，RPC 按开发者最新指定使用 `http://192.168.110.180:8545`；本地链地址在开发 env，ABI 与映射见 `docs/contracts/README.md`。
+4. API 逻辑：已接入当前可用接口，等待开发者测试和反馈；预约、购卡、卖出已绑定完整签名和链上交易流程，禁止独立提交预备订单。
+5. 多语言已开放六种语言并完成前端词库、静态文案与公共提示翻译，语言开关和主题保留原基线。七个一级业务页现已加入横幅、卡片、统计及列表的轻量入场动画，视口内按元素播放一次，分页新增项单独播放；支持减少动态效果、键盘即时显示和离页清理。本轮动画只运行相关类型、源码/样式及隔离回归检查，未重新打包，视觉验收由开发者负责。
 
-Activation cards follow Figma node `31024:3260`. Local mock cards have face values 10/20/30 and owned counts 10/2/0; records expand from 4 to 8. Gifting uses a local address, positive-integer and inventory validation form; confirmation only closes it without transactions or inventory changes, while zero inventory shows a message. The design's `转增` is standardized to `转赠`, with all three enabled languages populated. Eight Figma resources are local under `src/assets/activation-card/`; the four large images were converted to WebP from 10,676,687 to 616,436 bytes, approximately 94.23% smaller. Fixed shared UI is unchanged. See [the activation-card module notes](src/pages/main/activation-card/README.md).
-我的激活卡参考 Figma 节点 `31024:3260`。本地 mock 面值为 10/20/30，拥有数量为 10/2/0；记录从 4 条展开至 8 条。转赠使用本地地址、正整数和库存校验表单，确认仅关闭，不发生交易或库存变更；0 库存仅作提示。设计“转增”统一为“转赠”，三种已启用语言词条已补齐。八份 Figma 资源已下载到 `src/assets/activation-card/`，四张大图转为 WebP，从 10,676,687 bytes 降至 616,436 bytes，减少约 94.23%；固定公共 UI 保持不变。详见[我的激活卡模块说明](src/pages/main/activation-card/README.md)。
+## Environment / 环境
 
-The assets page contains a local asset overview and transaction history. Withdrawal opens a local confirmation dialog; confirming only closes it, without changing balances, submitting a withdrawal or requesting API/RPC. User-facing copy follows the approved `提取` terminology. See [the assets module notes](src/pages/main/asset/README.md).
-我的资产页包含本地资产预览与资产明细。提取打开本地确认弹窗，确认仅关闭，不改变余额、不提交提取、不发起 API/RPC；面向用户的文案统一使用项目批准的“提取”术语。详见[我的资产模块说明](src/pages/main/asset/README.md)。
+- `.env.development`：`VITE_STATIC_PAGE_MODE = 0`，`VITE_BASE_URL = http://192.168.110.11:9520`。
+- 登录恢复真实钱包签名及 Token 鉴权；不再固定已登录。开发登录签署 `Login-{timestamp}`，接口为 `/api/auth/login`，邀请码字段为 `ref`。
+- `.env.development` 已配置本地 RPC、USDT、DISCO、DiscoProject 地址和部署链 ID；每次写链先检查部署与钱包网络。
+- `.env.production` 已按 `docs/contracts/bsc.json` 配置 BSC（56）正式项目和 DISCO 地址；USDT 由正式项目合约公共 `usdt()` 读取确认。`VITE_BASE_URL`、`VITE_RPC_URL` 保持为空，生产接口使用当前站点同源 `/api/...`。
 
-The team page contains local team metrics and a direct-referral member list. Its copy action copies a real text URL assembled from the current origin, configured deployment prefix and mock referral code. With the current prefix the referral path is `/h5/ref/DBK6P8`; it does not request or infer real team or wallet data. See [the team module notes](src/pages/main/team/README.md).
-我的团队页包含本地团队统计与直推成员列表。复制按钮会实际复制由当前站点同源地址、配置部署前缀和 mock 邀请码组成的文本链接；当前部署前缀下路径为 `/h5/ref/DBK6P8`，不请求或推断真实团队及钱包数据。详见[我的团队模块说明](src/pages/main/team/README.md)。
+## Latest home design / 当前首页设计
 
-The invite page copies the mock referral code and link as real text. Saving a poster uses local artwork and Canvas to compose a PNG for preview and download, with local loading and failure feedback. No upload, backend poster service or business request is involved. Shared copy feedback and all new page copy are included in the three project locales. See [the invite module notes](src/pages/main/invite/README.md).
-邀请好友页可实际复制 mock 邀请码与邀请链接。保存海报通过本地素材与 Canvas 合成 PNG，支持预览和下载，并提供本地生成中及失败反馈；不上传、不调用后端海报服务或业务接口。共享复制反馈及新增页面文案均已补齐三种项目语言。详见[邀请好友模块说明](src/pages/main/invite/README.md)。
+首页以开发者更正的 Figma 节点 `31235:4061` 为准。新增“切换金额”及对应原始 SVG，使用后端配置选择场次/档位，确认同步首页展示并由预约弹窗承接；关闭未确认选择不改变首页。此前要求的消耗列 `flex-2` 保留，其余两列为 `flex-1`。场次和金额使用统一 Picker，预约已接入链上提交及成功刷新，页面测试由开发者负责。
 
-Assets and team reuse `BusinessPageHero` for their page banners. Team and invite share `src/mock/referral.ts`, which owns the `DBK6P8` code and builds same-origin links with the configured deployment prefix. This reuse does not change the fixed shared UI baseline.
-我的资产与我的团队的页内顶部展示复用 `BusinessPageHero`。团队与邀请好友共用 `src/mock/referral.ts`，由它维护 `DBK6P8` 邀请码及带配置部署前缀的同源链接；本次复用不改变已固定的公共界面基线。
+## API coverage / 接口覆盖
 
-The three new pages contain 21 local resources. Their total size is 26,258,775 bytes before optimization and 1,670,807 bytes afterward, approximately 93.64% smaller. The totals below are the sums of each page's supplied resource sizes.
-本轮三个新页面共使用 21 份本地资源，按各页资源实际加和，从 26,258,775 bytes 降至 1,670,807 bytes，减少约 93.64%。
+- 首页：Banner、公告、服务端弹窗/已读、预约配置、公共配置。弹窗仅保留“知道了”，已读提交成功后关闭，无详情跳转；正文最小 200px、最大 360px，超出滚动。
+- 预约记录：状态分组、分页；预约场次/档位选择弹窗。预约/卖出链上提交已接。
+- 激活卡：上架卡、单价、库存、记录、真实赠送；购买数量范围和合计已接，购买链上提交已接。
+- 资产：实际 USDT 账户余额与流水；提取金额及手续费、标签右侧余额、输入框内“全部”及分隔线、确认、提交成功刷新；不展示接收地址、最低提取、实际到账和提取提示，保留内部校验。
+- 团队/邀请：真实统计、直推分页、邀请码、同源邀请链接；保留邀请码复制，“保存链接”主按钮复制完整邀请链接，移除独立复制链接按钮和海报流程。
+- 公告：实际接口分页及详情、404 空态、已读上报、白名单富文本。
 
-| 页面 | 资源数 | 优化前（bytes） | 优化后（bytes） | 减少 |
-| --- | ---: | ---: | ---: | ---: |
-| 我的资产 | 6 | 8,301,883 | 307,527 | 96.30% |
-| 我的团队 | 10 | 12,151,829 | 362,492 | 97.02% |
-| 邀请好友 | 5 | 5,805,063 | 1,000,788 | 82.76% |
-| 合计 | 21 | 26,258,775 | 1,670,807 | 93.64% |
+列表每页 20 条，不猜总条数；刷新等待真实请求，旧请求以取消、最新请求 guard、登录会话版本隔离。写请求去重、失败保留输入，不自动重试。完整方法与待办见 [接口接入清单](docs/api/README.md)。
 
-Five runtime image resources were compressed from 3,715,915 to 554,184 bytes, a reduction of approximately 85.1%. Home artwork is under `src/assets/home/`, the mock Banner is under `src/mock/assets/`, and the USDT icon is shared through `src/assets/tokens/`.
-五张运行时图片资源从 3,715,915 bytes 压缩至 554,184 bytes，减少约 85.1%。首页切图位于 `src/assets/home/`，mock Banner 位于 `src/mock/assets/`，USDT 图标统一通过 `src/assets/tokens/` 复用。
+## Scope correction / 页面范围更正
 
-All six first-level menu pages have static implementations, with visual and interaction acceptance pending with the user. The static-page stage is not complete until the user accepts these pages. Development stays at Step 1; API and contract integration have not started, and static-page mode remains enabled.
-六个菜单一级页面均已有静态实现，视觉和交互验收待用户进行；用户验收前，不将静态页面阶段标记为完成。项目继续处于第 1 步，尚未进入接口或合约联调，静态页面模式保持开启。
+已按开发者要求撤回资产页额外增加的提取记录、个人资料入口及对应业务页面，同时移除自行新增的预约详情入口和弹窗。`/withdraw-history` 路由已移除，既有 `/user` 恢复模板空模块，不再提供昵称或头像编辑。相关 API 方法仅保留协议封装，不作为新增 UI 的依据。设计已有资产页、余额流水及提取操作、已接接口和首页 `flex-2` 保留。
 
-## Fixed shared UI baseline
-## 已固定的公共界面基线
+## Fixed baseline / 固定界面
 
-The developer has confirmed the current Header, left sidebar, six menu entries and their icons/routes/directories, matching wordmarks without app-name text, original single-icon language switch, light theme and primary-button skin. Later design references apply to business-page content only and must not automatically change these shared parts. Only an explicit developer request may change a fixed item. New business buttons reuse the existing skin and can vary their own size and radius without changing shared defaults.
-开发者已确认当前 Header、左侧侧边栏、六个菜单及图标/路由/目录、无名称文案的统一横版 Logo、原单图标多语言开关、亮色主题与主按钮皮肤为固定基线。后续效果图仅用于业务页面内容，不自动改动这些公共部分；只有开发者明确要求修改对应项时才调整。新业务按钮复用现有皮肤，可单独调整大小和圆角，不修改公共默认值。
+Header、从左侧弹出的侧栏、七项菜单顺序及图标、品牌、多语言开关、亮色主题和主按钮皮肤均保留。资产接口只提供 USDT，因此资产单位和图标按真实币种展示；不是改公共主题或图标入口。
 
-## Deferred integration values
-## 联调阶段补充
+## Verification / 验证分工
 
-- Static-page development is enabled locally with `VITE_STATIC_PAGE_MODE = 1`: keep the preview signed in and pause API/RPC/upload traffic. Disable it before integration. Production sets `0` and ignores this development-only feature.
-- 本地已开启静态页面开发模式 `VITE_STATIC_PAGE_MODE = 1`：预览固定已登录，暂停接口、RPC 和上传请求；联调前关闭。生产环境设为 `0`，且不会启用此开发功能。
+开发者负责接口、业务和页面测试。此前联调仅做 TypeScript 及相关源码/样式静态检查，不宣称接口实测通过。本轮开发者明确要求正式配置与生产打包，`pnpm build` 已通过，包含 prebuild 的 lint、全量测试及品牌检查，随后通过 TypeScript 与 Vite 构建；产物在 `dist/`，生产合约地址、无局域网接口/RPC 地址及 `/h5/` 资源前缀已核对。不进行真实钱包交易或浏览器验收。
 
-- Development API and RPC endpoints, Token addresses and business contract addresses are not configured yet. Obtain them before feature integration; do not infer production values from the template.
-- 开发接口、RPC、Token 与业务合约地址尚未配置，在功能联调前补齐。
-- Production `VITE_BASE_URL` and `VITE_RPC_URL` stay empty, as required by the template.
-- 生产环境 `VITE_BASE_URL`、`VITE_RPC_URL` 按模板规则保持为空。
-- Social sharing remains disabled. Add public metadata before enabling it for release.
-- 社交分享保持默认关闭；发布时如需启用，再补齐公开元数据。
-- Keep the Empty placeholder during early development; replace it when the designed empty-state resource is available.
-- 开发初期保留 Empty 占位图；设计资源就绪后再替换。
+## Next step / 下一步
 
-## Initial setup verification record
-## 初始化阶段验证记录
+代码质量复盘已按开发者指定范围修复：下拉刷新忽略 Portal 弹窗手势，首页公共配置改为后台非阻塞请求，合约封装从 ABI 推导读写方法、参数及返回值，购卡测试改为覆盖当前页面，接入文档同步正式 BSC 配置。拒绝登录签名后的开屏行为按本轮要求保持原状。回归使用隔离接口和钱包桩，strict 类型检查及完整生产构建通过；真实钱包和接口验收仍由开发者负责。
 
-- `pnpm build` passed, including lint checks, all 245 tests, TypeScript compilation and the Vite production build.
-- `pnpm build` 通过，包含 Lint、全部 245 项测试、TypeScript 编译与 Vite 生产构建。
-- Browser preview shows the Disco title and supplied logo. A browser without a wallet shows the expected wallet-environment prompt in `dapp` mode.
-- 浏览器预览已显示 Disco 标题与用户提供的 Logo；无钱包浏览器在 `dapp` 模式下正常提示使用钱包环境打开。
-
-These records describe initial setup before static-page mode was enabled. Visual and interaction acceptance of all six current menu pages remains the user's responsibility and is pending.
-以上为开启静态页面模式前的初始化验证记录。当前六个菜单页面的视觉和交互验收仍由用户负责，尚待验收。
-
-## Next development step
-## 下一步开发
-
-Continue Step 1: let the user accept all six menu pages and address their feedback. Keep static-page mode enabled and do not declare this stage complete or advance to API or contract integration before user acceptance. Follow `PROJECT_WORKFLOW.md` for any additional designed pages and the later integration steps.
-继续第 1 步：由用户验收六个菜单页面，并处理验收反馈。保持静态页面模式开启，用户验收前不宣称该阶段完成，也不推进接口或合约联调；新增设计页及后续联调仍按 `PROJECT_WORKFLOW.md` 执行。
+由开发者在钱包环境下测试 API 与本地链预约、购卡、卖出流程，按反馈修正交互；生产部署地址及链 ID 已按正式部署文件配置，不复用本地链地址。Empty 缺省图已替换完成，社交发布元数据等既有待办仍保留。

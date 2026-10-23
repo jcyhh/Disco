@@ -1,6 +1,5 @@
 import {
     useEffect,
-    useRef,
     useState,
 } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -9,6 +8,7 @@ import {
     useParams,
 } from 'react-router'
 
+import splashLogoUrl from '@/assets/splash/splash-logo.webp'
 import { Icon } from '@/components/Icon'
 import {
     APP_CONFIG,
@@ -28,13 +28,10 @@ type SplashRouteParams = {
     ref?: string
 }
 
-const appLogoUrl = `${APP_CONFIG.routeBase}brand/app-logo.png`
-
 export function SplashPage() {
     const { t } = useTranslation()
     const { ref } = useParams<SplashRouteParams>()
     const navigate = useNavigate()
-    const hasStartedRef = useRef(false)
     const [walletRequired, setWalletRequired] = useState(false)
     const loading = APP_CONFIG.loginMode !== APP_LOGIN_MODE.account && !walletRequired
 
@@ -47,27 +44,28 @@ export function SplashPage() {
     }, [navigate, ref])
 
     useEffect(() => {
-        if (ref || hasStartedRef.current) return
-
-        hasStartedRef.current = true
+        if (ref) return
+        let active = true
 
         async function startSplashAuthFlow(): Promise<void> {
             await waitForSplashAnimation()
+            if (!active) return
             const result = await startAuthFlow()
 
-            if (result === AUTH_STARTUP_RESULT.walletRequired) {
+            if (active && result === AUTH_STARTUP_RESULT.walletRequired) {
                 setWalletRequired(true)
             }
         }
 
         void startSplashAuthFlow()
+        return () => { active = false }
     }, [ref])
 
     return (
         <section className="splash-page" data-page="splash">
             <div className="splash-page__brand flex flex-column items-center justify-center animate__animated animate__zoomIn ani-delay-3">
                 <img
-                    src={appLogoUrl}
+                    src={splashLogoUrl}
                     className="splash-page__logo"
                     alt={APP_CONFIG.name}
                 />
@@ -84,7 +82,7 @@ export function SplashPage() {
                     <Icon
                         name="loading"
                         className="size-15"
-                        ariaLabel="Loading"
+                        ariaLabel={t('加载中')}
                     />
                 ) : null}
             </div>

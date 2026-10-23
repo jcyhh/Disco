@@ -1,3 +1,11 @@
+# 当前接口接入
+
+当前使用 `/api/users/my.usdt_balance` 和 `balance_logs?ccy=usdt_balance`，币种为 USDT。提取读取配置、预览手续费、二次确认并真实提交，成功刷新。金额标签与右侧余额使用 between 布局，“全部”位于输入框右侧并有竖向分隔线；不展示接收地址、最低提取、实际到账和提取提示，内部金额与最低限额校验保留。已撤回设计外的提取记录、个人资料入口及页面；只保留设计已有资产页和提取操作。
+
+测试由开发者负责。完整接口映射见项目 `docs/api/README.md`。下方为保留的历史静态设计/资源记录，其中 mock 行为不再用于当前页面。
+
+---
+
 # 我的资产静态页面
 
 参考 [Figma 节点 31040:4380](https://www.figma.com/design/NVwAAv12WZx1LiCTqPMNWD?node-id=31040-4380)。顶部复用 `BusinessPageHero`，资产预览及六条收支明细使用 `src/mock/asset.ts`；余额为 `8,864.980324 disco`，收入/支出分别使用原设计中的绿色/紫色图标和金额。

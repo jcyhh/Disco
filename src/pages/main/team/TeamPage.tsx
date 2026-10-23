@@ -1,3 +1,5 @@
+import { usePageReveal } from '@/hooks/usePageReveal.ts'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import sectionStarUrl from '@/assets/common/section-star.png'
@@ -13,30 +15,36 @@ import teamCountIconUrl from '@/assets/team/team-count.webp'
 import teamPerformanceIconUrl from '@/assets/team/team-performance.webp'
 import { BusinessPageHero } from '@/components/BusinessPageHero'
 import { message } from '@/components/Message'
-import { getMockReferralLink } from '@/mock/referral.ts'
-import { mockTeamMembers, mockTeamStats, type MockTeamMember } from '@/mock/team.ts'
+import { getCurrentUser, getReferrals } from '@/features/user/api.ts'
+import type { ReferralUser } from '@/features/user/types.ts'
+import { getReferralLink } from '@/features/integration/referral.ts'
+import { useApiResource } from '@/hooks/useApiResource.ts'
+import { useApiList } from '@/hooks/useApiList.ts'
+import { usePageRefresh } from '@/components/PagePullRefresh'
+import { ApiState, ApiListFooter } from '@/components/ApiState/ApiState.tsx'
+import { formatAmount } from '@/shared/formatters/formatAmount.ts'
 import { copyTextToClipboard } from '@/shared/clipboard/copyTextToClipboard.ts'
 
 import './TeamPage.scss'
 
 const TEAM_STATISTICS = [
-    { label: '团队人数', value: mockTeamStats.teamCount, image: teamCountIconUrl, crop: 'team-count' },
-    { label: '直推人数', value: mockTeamStats.directCount, image: directCountIconUrl, crop: 'direct-count' },
-    { label: '有效直推', value: mockTeamStats.effectiveDirectCount, image: effectiveDirectIconUrl, crop: 'effective-direct' },
+    { label: '团队人数', field: 'team_count', image: teamCountIconUrl, crop: 'team-count' },
+    { label: '直推人数', field: 'referral_count', image: directCountIconUrl, crop: 'direct-count' },
+    { label: '有效直推', field: 'valid_referral_count', image: effectiveDirectIconUrl, crop: 'effective-direct' },
 ] as const
 
-function TeamMemberCard({ member }: { member: MockTeamMember }) {
+function TeamMemberCard({ member }: { member: ReferralUser }) {
     const { t } = useTranslation()
 
     return (
-        <li className="team-page__member app-card">
+        <li className="team-page__member app-card" data-reveal="rise">
             <div className="flex items-center justify-between flex-wrap column-gap-16 row-gap-10">
                 <p className="size-28 bold-5 lh-40">{member.address}</p>
                 <time
                     className="team-page__muted size-24 lh-34 word-nowrap"
-                    dateTime={member.joinedAt.replaceAll('.', '-').replace(' ', 'T')}
+                    dateTime={member.created_at.replaceAll('.', '-').replace(' ', 'T')}
                 >
-                    {member.joinedAt}
+                    {member.created_at}
                 </time>
             </div>
 
@@ -47,14 +55,14 @@ function TeamMemberCard({ member }: { member: MockTeamMember }) {
                     </span>
                     <dl className="team-page__metric-copy">
                         <dt className="team-page__muted size-20 lh-28">{t('团队业绩(USDT)')}</dt>
-                        <dd className="team-page__member-value size-24 bold-7 lh-34 mt-4">{member.teamPerformance}</dd>
+                        <dd className="team-page__member-value size-24 bold-7 lh-34 mt-4">{formatAmount(member.team_kpi)}</dd>
                     </dl>
                 </div>
                 <div className="team-page__metric flex items-center column-gap-16">
                     <img src={memberPersonalPerformanceIconUrl} className="team-page__performance-image img-60 flex-none" alt="" />
                     <dl className="team-page__metric-copy">
                         <dt className="team-page__muted size-20 lh-28">{t('个人业绩(USDT)')}</dt>
-                        <dd className="team-page__member-value size-24 bold-7 lh-34 mt-4">{member.personalPerformance}</dd>
+                        <dd className="team-page__member-value size-24 bold-7 lh-34 mt-4">{formatAmount(member.kpi)}</dd>
                     </dl>
                 </div>
             </div>
@@ -63,10 +71,18 @@ function TeamMemberCard({ member }: { member: MockTeamMember }) {
 }
 
 export function TeamPage() {
+    const pageRef = usePageReveal<HTMLElement>()
     const { t } = useTranslation()
-    const referralLink = getMockReferralLink()
+    const user = useApiResource(getCurrentUser)
+    const members = useApiList(getReferrals)
+    const referralLink = getReferralLink(user.data?.referral_code ?? '')
+    const reloadUser = user.reload
+    const reloadMembers = members.reload
+    const refresh = useCallback(async () => { await Promise.all([reloadUser(), reloadMembers()]) }, [reloadUser, reloadMembers])
+    usePageRefresh(refresh)
 
     async function handleCopyReferralLink() {
+        if (!referralLink) return
         const copied = await copyTextToClipboard(referralLink)
         if (copied) {
             message.success(t('复制成功'))
@@ -76,10 +92,11 @@ export function TeamPage() {
     }
 
     return (
-        <section className="team-page container pb-40" data-page="team" aria-label={t('我的团队')}>
+        <section ref={pageRef} className="team-page container pb-40" data-page="team" aria-label={t('我的团队')}>
             <BusinessPageHero imageUrl={heroBannerUrl} title={t('我的团队')} subtitle={t('汇聚同行力量')} />
+            <ApiState loading={user.loading} error={user.error} onRetry={user.reload} />
 
-            <div className="team-page__referral app-card grid column-gap-20 mt-30">
+            <div className="team-page__referral app-card grid column-gap-20 mt-30" data-reveal="rise" data-reveal-delay="1">
                 <div className="team-page__referral-icon flex-center">
                     <span className="team-page__artwork team-page__artwork--referral img-88" aria-hidden="true">
                         <img src={referralLinkIconUrl} alt="" />
@@ -91,7 +108,7 @@ export function TeamPage() {
                         <button
                             type="button"
                             className="team-page__copy flex items-center flex-none app-color size-24 lh-34"
-                            onClick={handleCopyReferralLink}
+                            disabled={!referralLink} onClick={handleCopyReferralLink}
                             aria-label={t('复制邀请链接')}
                         >
                             <span className="team-page__artwork team-page__artwork--copy img-28 flex-none" aria-hidden="true">
@@ -107,41 +124,42 @@ export function TeamPage() {
             </div>
 
             <div className="grid grid-3 column-gap-15 mt-10">
-                {TEAM_STATISTICS.map((item) => (
-                    <div key={item.crop} className="team-page__stat tc pt-96 pb-22 pl-10 pr-10">
+                {TEAM_STATISTICS.map((item, index) => (
+                    <div key={item.crop} className="team-page__stat tc pt-96 pb-22 pl-10 pr-10" data-reveal="rise" data-reveal-delay={index + 1}>
                         <span className={`team-page__artwork team-page__stat-artwork team-page__artwork--${item.crop} img-86`} aria-hidden="true">
                             <img src={item.image} alt="" />
                         </span>
-                        <strong className="team-page__stat-value size-28 bold-7 lh-40">{item.value}</strong>
+                        <strong className="team-page__stat-value size-28 bold-7 lh-40">{user.data?.[item.field] ?? '--'}</strong>
                         <p className="team-page__muted size-24 lh-34 mt-4">{t(item.label)}</p>
                     </div>
                 ))}
             </div>
 
             <div className="grid grid-2 column-gap-10 mt-15">
-                <div className="team-page__performance app-row-card flex items-center column-gap-16">
+                <div className="team-page__performance app-row-card flex items-center column-gap-16" data-reveal="rise">
                     <img src={teamPerformanceIconUrl} className="team-page__performance-image img-86 flex-none" alt="" />
                     <dl className="team-page__metric-copy">
                         <dt className="team-page__muted size-24 lh-34">{t('团队业绩(USDT)')}</dt>
-                        <dd className="app-color size-28 bold-7 lh-40 mt-10">{mockTeamStats.teamPerformance}</dd>
+                        <dd className="app-color size-28 bold-7 lh-40 mt-10">{user.data ? formatAmount(user.data.team_kpi) : '--'}</dd>
                     </dl>
                 </div>
-                <div className="team-page__performance app-row-card flex items-center column-gap-16">
+                <div className="team-page__performance app-row-card flex items-center column-gap-16" data-reveal="rise">
                     <img src={personalPerformanceIconUrl} className="team-page__performance-image img-86 flex-none" alt="" />
                     <dl className="team-page__metric-copy">
                         <dt className="team-page__muted size-24 lh-34">{t('个人业绩(USDT)')}</dt>
-                        <dd className="app-color size-28 bold-7 lh-40 mt-10">{mockTeamStats.personalPerformance}</dd>
+                        <dd className="app-color size-28 bold-7 lh-40 mt-10">{user.data ? formatAmount(user.data.kpi) : '--'}</dd>
                     </dl>
                 </div>
             </div>
 
             <h2 className="flex items-center gap-4 size-32 bold-6 lh-44 mt-30">
-                <img src={sectionStarUrl} className="img-40 flex-none" alt="" />
+                <img src={sectionStarUrl} className="section-star-motion img-40 flex-none" alt="" />
                 <span>{t('直推成员列表')}</span>
             </h2>
             <ul className="grid grid-1 row-gap-20 mt-25">
-                {mockTeamMembers.map((member) => <TeamMemberCard key={member.id} member={member} />)}
+                {members.items.map((member) => <TeamMemberCard key={member.id} member={member} />)}
             </ul>
+            <ApiListFooter {...members} />
         </section>
     )
 }

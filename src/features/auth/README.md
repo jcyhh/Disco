@@ -28,8 +28,8 @@ The splash page calls `startAuthFlow()` to make the startup decision.
 - DApp 模式已有 Token：先校验当前钱包账号，再加载 `/api/users/my` 等鉴权接口。
 - If the cached wallet address no longer matches the current wallet during splash startup, clear stale auth state and start DApp login again in the same flow.
 - 开屏启动时如果缓存钱包地址与当前钱包不一致，清理旧登录态并在同一轮流程里重新发起 DApp 登录。
-- No token with a detected provider: connect the wallet and sign. Only development with blank `VITE_BASE_URL` uses a temporary token; production always calls the address-login API.
-- 没有 Token 且检测到 Provider：连接钱包并签名。仅开发环境且 `VITE_BASE_URL` 为空时使用临时 Token；生产环境始终请求地址登录接口。
+- No token with a detected provider: connect the wallet and sign. Only development with blank `VITE_BASE_URL` uses a temporary token; production always calls the documented wallet-login API.
+- 没有 Token 且检测到 Provider：连接钱包并签名。仅开发环境且 `VITE_BASE_URL` 为空时使用临时 Token；生产环境始终请求文档约定的钱包登录接口。
 - In `hybrid` mode, Flutter or a regular browser without an injected provider opens the email/password login page.
 - 在 `hybrid` 模式中，Flutter 或普通浏览器未检测到注入 Provider 时跳转账号密码登录页。
 
@@ -80,3 +80,15 @@ Splash and referral routes own their startup flow after the splash animation; th
 
 Login and cleanup advance a session version. Async recovery and HTTP 401 handling must verify both the captured version and token before changing the current session. A late response from an old session cannot sign out a newly logged-in user, even when the backend reuses the same token string.
 登录和清理会递增会话版本。异步恢复及 HTTP 401 处理须同时核对版本和 Token，旧会话迟到的响应不得退出新会话，即使后端复用了相同 Token 字符串。
+
+## Disco 接口登录
+
+当前请求为 `POST /api/auth/login`，钱包签署 `Login-{Unix 秒}`，正文为 `address`、`signature`、`timestamp` 和 `ref`。开发 API 已配置，静态模式关闭，正常恢复和校验钱包登录态；没有调用业务合约或本地测试 RPC。已有用户的新地址需要有效邀请码。
+
+## 钱包切换与签名防重
+
+以 AIGO 的核心流程为基线：真实切换账户或手动切链时清理旧会话，回到开屏，再按既有流程登录。相同地址（忽略大小写）和相同链 ID 的重复通知不触发退出；业务受控切链继续由原有 listenerGuard 处理。
+
+同一轮登录共享一个进行中的 Promise，不并发申请 Login 签名。新账户登录等待旧钱包请求结束，旧尝试在初始化、连接状态写入、签名前及接口响应后校验是否仍有效，失效时不继续签名或覆盖新会话。钱包已弹出的旧签名请求无法由页面撤销。开屏组件离开后，其尚未完成的动画等待不再启动登录。
+
+本次仅执行类型和相关源码静态检查，钱包切换及弹窗验收由开发者负责。

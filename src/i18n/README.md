@@ -27,14 +27,14 @@ Use `changeAppLanguage()` to switch languages.
 使用 `changeAppLanguage()` 切换语言。
 
 ```ts
-await changeAppLanguage('zh-Hant')
+await changeAppLanguage('ko')
 ```
 
 ## Language list
 ## 语言列表
 
-All enabled languages are defined in `APP_LANGUAGES` inside `config.ts`. New projects enable English, Traditional Chinese and Simplified Chinese by default.
-所有启用语言都集中定义在 `config.ts` 的 `APP_LANGUAGES` 中，新项目默认只启用英语、繁体中文和简体中文。
+All enabled languages are defined in `APP_LANGUAGES` inside `config.ts`. This project enables Simplified Chinese, English, Korean, Japanese, Russian and Mongolian (Cyrillic).
+所有启用语言集中定义在 `config.ts` 的 `APP_LANGUAGES` 中。本项目按开发者要求启用六种语言：简体中文 `zh-Hans`、英文 `en`、韩文 `ko`、日文 `ja`、俄文 `ru`、西里尔蒙古文 `mn`。繁体词库保留在仓库但不再出现在语言列表，旧缓存会回退到环境默认语言。
 
 Each item merges shared common copy, shared DApp copy and project copy in that order. Project entries override shared entries.
 每个数组项依次合并 common、DApp 和 project 词库，项目词条可以覆盖通用词条。
@@ -51,8 +51,8 @@ When `enableI18n` is `false`, initialization, local storage and the app store ar
 When a real project does not need a language, remove the whole language item so Vite stops generating that language chunk.
 真实项目不需要某种语言时，移除整个语言数组项即可让 Vite 不再生成对应语言 chunk。
 
-Language codes use standard values such as `zh-Hans`, `zh-Hant` and `ms`.
-语言代码使用标准值，例如 `zh-Hans`、`zh-Hant` 和 `ms`。
+Enabled language codes are `zh-Hans`, `en`, `ko`, `ja`, `ru` and `mn`.
+当前语言代码使用 `zh-Hans`、`en`、`ko`、`ja`、`ru` 和 `mn`。
 
 Do not restore legacy custom codes such as `zh`, `hk` or `ma`.
 不要恢复旧项目中的 `zh`、`hk` 或 `ma` 这类自定义代码。
@@ -89,3 +89,11 @@ Optional locale resources remain in the repository. To enable another language, 
 
 `translate()` is safe before initialization and returns the supplied key until resources are ready. Shared components, formatters and service errors use shared resources; never copy business-specific project dictionaries back into this template.
 `translate()` 在初始化前可安全调用，资源未就绪时返回传入的 key。通用组件、格式化工具和服务错误使用公共词库，不要把业务专属项目词库回灌模板。
+
+## Disco 翻译范围
+
+六种语言均提供完整的 common、DApp 与项目词库，包括侧栏、首页固定介绍、七个业务页面、公告页面、弹窗、表单校验、交易提示和无障碍标签。数字、USDT/DISCO、钱包地址和品牌保持原值。英文和俄文处理卡片数量复数。
+
+API 请求头 `lang` 原样传递上述标准语言代码。公告、Banner 图片和其他动态业务内容按服务端选定语言返回；前端不翻译图片中文字或任意用户内容。已经明确的三种标准卡名及“第一轮”也提供本地翻译，未知自定义名称保持服务端原文。已收录的服务端错误可以复用本地词条，未知错误保持原文，不猜测改写。
+
+开发默认中文、生产默认英文，继续保留原语言单图标和 Picker 切换流程。翻译键、非空值、插值占位符与剩余静态 JSX 文案做源码校验；不进行浏览器或业务验收。

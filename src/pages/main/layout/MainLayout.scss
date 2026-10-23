@@ -1,3 +1,7 @@
+.app-layout {
+    @include page-background(calc(88px + env(safe-area-inset-top)));
+}
+
 .app-tabbar{
     position: fixed;
     bottom: 0;

@@ -86,14 +86,10 @@
 
     &__gift {
         @include full-button($height: 60px, $fontSize: 26px);
-    }
 
-    &__more {
-        color: var(--app-content-muted-color);
-    }
-
-    &__more-arrow {
-        transform: rotate(180deg) scaleY(-1);
+        &:disabled {
+            cursor: not-allowed;
+        }
     }
 
     &__record {
