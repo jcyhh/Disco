@@ -1,6 +1,7 @@
 import { usePageReveal } from '@/hooks/usePageReveal.ts'
 import { useCallback, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { Address } from 'viem'
 
 import cardDecorationUrl from '@/assets/activation-card/card-decoration.svg'
 import giftIconUrl from '@/assets/activation-card/gift.svg'
@@ -12,12 +13,14 @@ import { ApiState } from '@/components/ApiState/ApiState.tsx'
 import { InfiniteScroll } from '@/components/InfiniteScroll'
 import { usePageRefresh } from '@/components/PagePullRefresh'
 import { getActivationCards, getActivationCardLogs, giftActivationCard } from '@/features/activation-card/api.ts'
-import { ACTIVATION_CARD_OPTIONS } from '@/features/activation-card/config.ts'
+import { ACTIVATION_CARD_COVERS } from '@/features/activation-card/config.ts'
 import type { ActivationCard } from '@/features/activation-card/types.ts'
+import { getAuthSessionVersion } from '@/features/auth/lifecycle.ts'
 import { useApiResource } from '@/hooks/useApiResource.ts'
 import { useApiList } from '@/hooks/useApiList.ts'
 import { useApiMutation } from '@/hooks/useApiMutation.ts'
 import { getWalletAddress } from '@/services/storage/common.ts'
+import { signDappMessage } from '@/services/dapp'
 import { Popup } from '@/components/Popup'
 
 import { validateActivationCardGift, type ActivationCardGiftValidationError } from './gift.ts'
@@ -80,7 +83,28 @@ export function ActivationCardPage() {
         if (Number(quantity) > 1000000) { setGiftError(t('单次最多一百万张')); return }
         if (recipient.trim().toLowerCase() === getWalletAddress().toLowerCase()) { setGiftError(t('不能赠送给自己')); return }
         setGiftError('')
-        void execute((signal) => giftActivationCard({ address: recipient.trim(), card_id: giftCard.id, num: Number(quantity) }, signal), async () => {
+        void execute(async (signal) => {
+            const account = getWalletAddress() as Address
+            const session = getAuthSessionVersion()
+            function assertCurrent() {
+                signal.throwIfAborted()
+                if (!account || session !== getAuthSessionVersion() || account.toLowerCase() !== getWalletAddress().toLowerCase()) {
+                    throw new Error(t('钱包账号已变更，请重新登录'))
+                }
+            }
+
+            assertCurrent()
+            let signed
+            try {
+                signed = await signDappMessage('Transfer', { account, assertCurrent })
+            } catch (error) {
+                assertCurrent()
+                setGiftError(t('签名失败'))
+                throw error
+            }
+            assertCurrent()
+            return giftActivationCard({ address: recipient.trim(), card_id: giftCard.id, num: Number(quantity), signature: signed.signature, timestamp: signed.timestamp }, signal)
+        }, async () => {
             setShowGiftForm(false)
             message.success(t('转赠成功'))
             await refresh()
@@ -106,24 +130,24 @@ export function ActivationCardPage() {
                 </h2>
 
                 <div className="activation-card-page__card-list grid grid-1 row-gap-20 mt-24">
-                    {ACTIVATION_CARD_OPTIONS.map((option, index) => {
-                        const card = cards.data?.find(({ amount }) => Number(amount) === option.amount)
-                        return <article key={option.amount} className="activation-card-page__card grid column-gap-20" data-reveal="rise" data-reveal-delay={Math.min(index, 3) + 1}>
+                    {(cards.data ?? []).map((card, index) => {
+                        const cover = ACTIVATION_CARD_COVERS[index]
+                        return <article key={card.id} className="activation-card-page__card grid column-gap-20" data-reveal="rise" data-reveal-delay={Math.min(index, 3) + 1}>
                             <img src={cardDecorationUrl} className="activation-card-page__card-decoration" alt="" />
-                            <img src={option.ownedImage} className="activation-card-page__card-image" alt="" />
+                            {cover ? <img src={cover.ownedImage} className="activation-card-page__card-image" alt="" /> : null}
                             <div className="activation-card-page__card-info flex flex-column justify-between row-gap-10">
                                 <div className="pl-10 pt-4">
-                                    <h3 className="size-32 bold-6 lh-44">{t('{{value}}＄激活卡', { value: option.amount })}</h3>
+                                    <h3 className="size-32 bold-6 lh-44">{card.name}</h3>
                                     <p className="activation-card-page__muted size-24 lh-34 mt-10">
                                         {t('拥有数量：')}
-                                        <span className="activation-card-page__count bold-6">{card ? t('{{count}}张', { count: card.num }) : '--'}</span>
+                                        <span className="activation-card-page__count bold-6">{t('{{count}}张', { count: card.num })}</span>
                                     </p>
                                 </div>
                                 <button
                                     type="button"
-                                    className={`activation-card-page__gift${!card || card.num <= 0 ? ' opc-5' : ''}`}
-                                    disabled={!card || card.num <= 0}
-                                    onClick={() => { if (card) openGiftForm(card) }}
+                                    className={`activation-card-page__gift${card.num <= 0 ? ' opc-5' : ''}`}
+                                    disabled={card.num <= 0}
+                                    onClick={() => openGiftForm(card)}
                                 >
                                     <img src={giftIconUrl} className="img-30 flex-none" alt="" />
                                     {t('转赠')}
@@ -142,8 +166,9 @@ export function ActivationCardPage() {
                 <InfiniteScroll loading={logs.loading} hasMore={logs.hasMore} onLoadMore={logs.loadMore} disabled={logs.error || submitting || showGiftForm}>
                     <ul id="activation-card-records" className="grid grid-1 row-gap-20 mt-30">
                         {logs.items.map((record) => (
-                            <li key={record.id} className="activation-card-page__record app-card flex items-center justify-between flex-wrap gap-16" data-reveal="rise">
-                                <p className="black size-28 bold-5 lh-40">{record.content} · {(record.card_name ? t(record.card_name) : '') || t('{{value}}＄激活卡', { value: record.amount })} {record.is_inc === 1 ? '+' : '−'}{record.num}</p>
+                            <li key={record.id} className="activation-card-page__record app-card flex flex-column items-start gap-16" data-reveal="rise">
+                                <p className="black size-28 bold-5 lh-40">{record.content} · {record.card_name} {record.is_inc === 1 ? '+' : '−'}{record.num}</p>
+                                {record.from_address ? <p className="activation-card-page__muted size-24 lh-36 word-break">{t('转赠地址')}：{record.from_address}</p> : null}
                                 <time
                                     className="activation-card-page__muted size-24 lh-36 word-nowrap"
                                     dateTime={record.created_at.replaceAll('.', '-').replace(' ', 'T')}
@@ -160,7 +185,7 @@ export function ActivationCardPage() {
             <Popup show={showGiftForm} title={t('转赠激活卡')} onClose={submitting ? undefined : closeGiftForm}>
                 <form className="activation-card-page__gift-form flex flex-column row-gap-20 size-24 lh-36 mt-30" noValidate onSubmit={handleGiftSubmit}>
                     <p className="bold-6">
-                        {(giftCard?.name ? t(giftCard.name) : '') || t('{{value}}＄激活卡', { value: giftCard?.amount ?? '' })}
+                        {giftCard?.name}
                         {' · '}{t('拥有数量：')}{t('{{count}}张', { count: giftCard?.num ?? 0 })}
                     </p>
                     <label className="activation-card-page__field flex flex-column row-gap-10">

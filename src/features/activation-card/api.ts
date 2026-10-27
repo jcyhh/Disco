@@ -12,7 +12,7 @@ export async function getActivationCardLogs(params: PageParams & { card_id?: num
     return result.list
 }
 
-export function giftActivationCard(data: { address: string; card_id: number; num: number }, signal?: AbortSignal): Promise<Record<string, never>> {
+export function giftActivationCard(data: { address: string; card_id: number; num: number; signature: string; timestamp: number }, signal?: AbortSignal): Promise<Record<string, never>> {
     return request({ url: '/api/activation_cards/gift', method: 'POST', data, signal })
 }
 

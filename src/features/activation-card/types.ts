@@ -1,6 +1,7 @@
 export interface ActivationCard {
     id: number
     name: string
+    /** USDT unit price returned by the API. */
     amount: string
     num: number
 }

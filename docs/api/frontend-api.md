@@ -368,10 +368,12 @@ Authorization: Bearer {token}
 ```json
 {
   "list": [
-    { "id": 1, "name": "", "amount": "10", "num": 0 }
+    { "id": 1, "name": "10USDT激活卡", "amount": "0.01", "num": 0 }
   ]
 }
 ```
+
+`amount` 为当前 USDT 单价。前端直接使用接口返回的卡列表、`name`、`amount`、`num` 和 `id`，不固定业务名称或价格；本地只配置封面资源，按接口列表顺序使用。购买和转赠使用接口返回的真实 `id`。
 
 ### 变动记录
 
@@ -426,11 +428,15 @@ Authorization: Bearer {token}
 
 `POST /activation_cards/gift` 需要登录。
 
+钱包签署 `Transfer-{timestamp}`，`timestamp` 使用当前 Unix 秒，与登录签名采用相同方式。
+
 ```json
 {
   "address": "0x...",
   "card_id": 1,
-  "num": 1
+  "num": 1,
+  "signature": "0x...",
+  "timestamp": 1760000000
 }
 ```
 

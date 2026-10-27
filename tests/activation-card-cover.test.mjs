@@ -11,34 +11,36 @@ await appI18n.use(initReactI18next).init({ lng: 'zh-Hans', resources: { 'zh-Hans
 const { ActivationCardPage } = await import('../src/pages/main/activation-card/ActivationCardPage.tsx')
 const { httpClient } = await import('../src/services/http/client.ts')
 
-test('owned card covers stay configured locally when the API is loading or omits card types', async () => {
+test('owned cards use API names, counts and list length while only covers come from local configuration', async () => {
     const previousAdapter = httpClient.defaults.adapter
     const cardGate = deferred()
     httpClient.defaults.adapter = async (config) => {
         if (config.url === '/api/activation_cards') await cardGate.promise
         const data = config.url === '/api/activation_cards'
-            ? { list: [{ id: 29, name: 'Server supplied name', amount: '20', num: 2 }] }
+            ? { list: [
+                { id: 29, name: '后端自定义卡名', amount: '0.02', num: 2 },
+                { id: 77, name: '零库存卡', amount: '88', num: 0 },
+            ] }
             : { list: [] }
         return { data, status: 200, statusText: 'OK', headers: {}, config }
     }
     const view = await mount(h(ActivationCardPage))
     try {
-        function checkCovers() {
-            const cards = [...view.container.querySelectorAll('.activation-card-page__card')]
-            assert.equal(cards.length, 3)
-            assert.deepEqual(cards.map((card) => card.querySelector('.activation-card-page__card-image').getAttribute('src').split('/').slice(-3).join('/')), [
-                'assets/activation-card/card-10.webp',
-                'assets/activation-card/card-20.webp',
-                'assets/activation-card/card-30.webp',
-            ])
-            return cards
-        }
-        checkCovers()
+        assert.equal(view.container.querySelectorAll('.activation-card-page__card').length, 0)
         await act(async () => { cardGate.resolve(); await cardGate.promise })
-        const cards = checkCovers()
-        assert.deepEqual(cards.map((card) => card.querySelector('h3').textContent), ['10＄激活卡', '20＄激活卡', '30＄激活卡'])
-        assert.deepEqual(cards.map((card) => card.querySelector('.activation-card-page__count').textContent), ['--', '2张', '--'])
-        assert.deepEqual(cards.map((card) => card.querySelector('button').disabled), [true, false, true])
+        const cards = [...view.container.querySelectorAll('.activation-card-page__card')]
+        assert.equal(cards.length, 2)
+        assert.deepEqual(cards.map((card) => card.querySelector('.activation-card-page__card-image').getAttribute('src').split('/').slice(-3).join('/')), [
+            'assets/activation-card/card-10.webp',
+            'assets/activation-card/card-20.webp',
+        ])
+        assert.deepEqual(cards.map((card) => card.querySelector('h3').textContent), ['后端自定义卡名', '零库存卡'])
+        assert.deepEqual(cards.map((card) => card.querySelector('.activation-card-page__count').textContent), ['2张', '0张'])
+        assert.deepEqual(cards.map((card) => card.querySelector('button').disabled), [false, true])
+        await act(async () => cards[1].querySelector('button').click())
+        assert.equal(document.querySelector('.activation-card-page__gift-form'), null)
+        await act(async () => cards[0].querySelector('button').click())
+        assert.ok(document.querySelector('.activation-card-page__gift-form').textContent.includes('后端自定义卡名'))
     } finally {
         await view.unmount()
         httpClient.defaults.adapter = previousAdapter
