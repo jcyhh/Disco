@@ -2,9 +2,6 @@ import { usePageReveal } from '@/hooks/usePageReveal.ts'
 import { useCallback, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import card10Url from '@/assets/activation-card/card-10.webp'
-import card20Url from '@/assets/activation-card/card-20.webp'
-import card30Url from '@/assets/activation-card/card-30.webp'
 import cardDecorationUrl from '@/assets/activation-card/card-decoration.svg'
 import giftIconUrl from '@/assets/activation-card/gift.svg'
 import heroBannerUrl from '@/assets/activation-card/hero-banner.webp'
@@ -15,8 +12,8 @@ import { ApiState } from '@/components/ApiState/ApiState.tsx'
 import { InfiniteScroll } from '@/components/InfiniteScroll'
 import { usePageRefresh } from '@/components/PagePullRefresh'
 import { getActivationCards, getActivationCardLogs, giftActivationCard } from '@/features/activation-card/api.ts'
+import { ACTIVATION_CARD_OPTIONS } from '@/features/activation-card/config.ts'
 import type { ActivationCard } from '@/features/activation-card/types.ts'
-import { getCardArt } from '@/features/integration/cardArt.ts'
 import { useApiResource } from '@/hooks/useApiResource.ts'
 import { useApiList } from '@/hooks/useApiList.ts'
 import { useApiMutation } from '@/hooks/useApiMutation.ts'
@@ -26,12 +23,6 @@ import { Popup } from '@/components/Popup'
 import { validateActivationCardGift, type ActivationCardGiftValidationError } from './gift.ts'
 
 import './ActivationCardPage.scss'
-
-const CARD_IMAGES: Record<10 | 20 | 30, string> = {
-    10: card10Url,
-    20: card20Url,
-    30: card30Url,
-}
 
 const GIFT_ERROR_MESSAGES: Record<ActivationCardGiftValidationError, string> = {
     'address-required': '请输入接收钱包地址',
@@ -107,7 +98,7 @@ export function ActivationCardPage() {
                 </div>
             </div>
 
-            <ApiState loading={cards.loading} error={cards.error} empty={cards.data?.length === 0} onRetry={cards.reload} />
+            <ApiState loading={cards.loading} error={cards.error} onRetry={cards.reload} />
             <section aria-labelledby="activation-cards-title">
                 <h2 id="activation-cards-title" className="flex items-center gap-4 size-32 bold-6 lh-44 mt-30">
                     <img src={sectionStarUrl} className="section-star-motion img-40 flex-none" alt="" />
@@ -115,30 +106,31 @@ export function ActivationCardPage() {
                 </h2>
 
                 <div className="activation-card-page__card-list grid grid-1 row-gap-20 mt-24">
-                    {(cards.data ?? []).map((card, index) => (
-                        <article key={card.id} className="activation-card-page__card grid column-gap-20" data-reveal="rise" data-reveal-delay={Math.min(index, 3) + 1}>
+                    {ACTIVATION_CARD_OPTIONS.map((option, index) => {
+                        const card = cards.data?.find(({ amount }) => Number(amount) === option.amount)
+                        return <article key={option.amount} className="activation-card-page__card grid column-gap-20" data-reveal="rise" data-reveal-delay={Math.min(index, 3) + 1}>
                             <img src={cardDecorationUrl} className="activation-card-page__card-decoration" alt="" />
-                            {getCardArt(card.amount, CARD_IMAGES) ? <img src={getCardArt(card.amount, CARD_IMAGES)} className="activation-card-page__card-image" alt="" /> : <div className="activation-card-page__card-image flex-center app-color size-32 bold-6">{card.amount} USDT</div>}
+                            <img src={option.ownedImage} className="activation-card-page__card-image" alt="" />
                             <div className="activation-card-page__card-info flex flex-column justify-between row-gap-10">
                                 <div className="pl-10 pt-4">
-                                    <h3 className="size-32 bold-6 lh-44">{(card.name ? t(card.name) : '') || t('{{value}}＄激活卡', { value: card.amount })}</h3>
+                                    <h3 className="size-32 bold-6 lh-44">{t('{{value}}＄激活卡', { value: option.amount })}</h3>
                                     <p className="activation-card-page__muted size-24 lh-34 mt-10">
                                         {t('拥有数量：')}
-                                        <span className="activation-card-page__count bold-6">{t('{{count}}张', { count: card.num })}</span>
+                                        <span className="activation-card-page__count bold-6">{card ? t('{{count}}张', { count: card.num }) : '--'}</span>
                                     </p>
                                 </div>
                                 <button
                                     type="button"
-                                    className={`activation-card-page__gift${card.num <= 0 ? ' opc-5' : ''}`}
-                                    disabled={card.num <= 0}
-                                    onClick={() => openGiftForm(card)}
+                                    className={`activation-card-page__gift${!card || card.num <= 0 ? ' opc-5' : ''}`}
+                                    disabled={!card || card.num <= 0}
+                                    onClick={() => { if (card) openGiftForm(card) }}
                                 >
                                     <img src={giftIconUrl} className="img-30 flex-none" alt="" />
                                     {t('转赠')}
                                 </button>
                             </div>
                         </article>
-                    ))}
+                    })}
                 </div>
             </section>
 

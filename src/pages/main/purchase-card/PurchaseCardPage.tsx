@@ -3,9 +3,6 @@ import { useCallback, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import sectionStarUrl from '@/assets/common/section-star.png'
-import card10Url from '@/assets/purchase-card/card-10.webp'
-import card20Url from '@/assets/purchase-card/card-20.webp'
-import card30Url from '@/assets/purchase-card/card-30.webp'
 import heroBannerUrl from '@/assets/purchase-card/hero-banner.webp'
 import selectedUrl from '@/assets/purchase-card/selected.svg'
 import unselectedUrl from '@/assets/purchase-card/unselected.svg'
@@ -15,6 +12,7 @@ import { Icon } from '@/components/Icon'
 import { message } from '@/components/Message'
 import { usePageRefresh } from '@/components/PagePullRefresh'
 import { getActivationCards } from '@/features/activation-card/api.ts'
+import { ACTIVATION_CARD_OPTIONS, type ActivationCardAmount } from '@/features/activation-card/config.ts'
 import { getCurrentUser } from '@/features/user/api.ts'
 import { buyActivationCardsWithWallet } from '@/services/contracts/disco.ts'
 import { useContractMutation } from '@/hooks/useContractMutation.ts'
@@ -26,19 +24,11 @@ import { parsePurchaseQuantity } from './purchase.ts'
 
 import './PurchaseCardPage.scss'
 
-const CARD_OPTIONS = [
-    { amount: 10, image: card10Url },
-    { amount: 20, image: card20Url },
-    { amount: 30, image: card30Url },
-] as const
-
-type CardAmount = (typeof CARD_OPTIONS)[number]['amount']
-
 export function PurchaseCardPage() {
     const pageRef = usePageReveal<HTMLElement>()
     const { t } = useTranslation()
     const { submitting, execute } = useContractMutation()
-    const [selectedAmount, setSelectedAmount] = useState<CardAmount>(10)
+    const [selectedAmount, setSelectedAmount] = useState<ActivationCardAmount>(10)
     const [quantityText, setQuantityText] = useState('1')
     const [showConfirmation, setShowConfirmation] = useState(false)
     const cards = useApiResource(getActivationCards)
@@ -90,7 +80,7 @@ export function PurchaseCardPage() {
                     {t('选择专属激活卡')}
                 </h2>
                 <fieldset className="purchase-card-page__options grid grid-3 column-gap-15 row-gap-30 mt-24" aria-labelledby="purchase-card-options-title">
-                    {CARD_OPTIONS.map((option, index) => {
+                    {ACTIVATION_CARD_OPTIONS.map((option, index) => {
                         const card = cardsReady ? cards.data?.find(({ amount }) => Number(amount) === option.amount) : undefined
                         return (
                             <label key={option.amount} className="purchase-card-page__option tap-target flex" data-reveal="rise" data-reveal-delay={Math.min(index, 3) + 1}>
@@ -103,7 +93,7 @@ export function PurchaseCardPage() {
                                     onChange={() => setSelectedAmount(option.amount)}
                                 />
                                 <span className="purchase-card-page__card flex flex-1 flex-column items-center tc">
-                                    <img src={option.image} className="purchase-card-page__art" alt="" />
+                                    <img src={option.purchaseImage} className="purchase-card-page__art" alt="" />
                                     <span className="purchase-card-page__info flex flex-column items-center mt-12">
                                         <span className="purchase-card-page__name size-26 bold-5 lh-36">{t('{{value}}＄激活卡', { value: option.amount })}</span>
                                         <span className="purchase-card-page__price size-28 bold-6 lh-40 mt-6">{card ? `${formatAmount(card.amount)} USDT` : '--'}</span>

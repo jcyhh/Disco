@@ -1,6 +1,6 @@
 # 购买激活卡
 
-一级路由 `/purchase-card`，对应更新后的 Figma `NVwAAv12WZx1LiCTqPMNWD` 节点 `32222:989`。页面固定横排展示 10、20、30 三种激活卡，名称和封面图由前端配置；`/api/activation_cards` 只用于匹配上架卡的真实 ID 和单价。接口未就绪或某种卡未上架时，该卡价格显示 `--`，购买按钮不可用，不显示加载失败提示。`/api/users/my` 的 USDT 可用余额仅展示，链上钱包余额由交易封装校验。
+一级路由 `/purchase-card`，对应更新后的 Figma `NVwAAv12WZx1LiCTqPMNWD` 节点 `32222:989`。页面固定横排展示 10、20、30 三种激活卡，名称和封面图由 `src/features/activation-card/config.ts` 的本地配置提供；`/api/activation_cards` 只用于匹配上架卡的真实 ID 和单价。接口未就绪或某种卡未上架时，该卡价格显示 `--`，购买按钮不可用，不显示加载失败提示。`/api/users/my` 的 USDT 可用余额仅展示，链上钱包余额由交易封装校验。
 
 数量允许一到一百万，安全正整数解析由 `purchase.ts` 提供。页面通过十进制计算工具重算合计，用户确认弹窗后才调用 `buyActivationCardsWithWallet`。该封装完成钱包余额检查、USDT 授权、后端签名和 `buyCard`，等待成功回执及索引同步后刷新卡和账户信息。提交中禁用确认和下拉刷新，失败保留选择及数量供用户主动重试。
 
