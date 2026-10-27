@@ -26,19 +26,21 @@ const { message } = await import('../src/components/Message/message.ts')
 const { setPurchaseAction } = await import(contractStub)
 
 const cards = [
-    { id: 17, name: 'Card A', amount: '0.1', num: 0 },
+    { id: 17, name: 'Card A', amount: '10', num: 0 },
     { id: 29, name: 'Card B', amount: '20', num: 0 },
+    { id: 35, name: 'Card C', amount: '30', num: 0 },
 ]
 function click(element) { element.dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true })) }
 
-async function setup() {
+async function setup({ cardGate, cardList = cards } = {}) {
     const previousAdapter = httpClient.defaults.adapter
     const previousSuccess = message.success, previousWarning = message.warning
     const requests = [], calls = [], feedback = []
     httpClient.defaults.adapter = async (config) => {
         requests.push(config.url)
         assert.ok(['/api/activation_cards', '/api/users/my'].includes(config.url))
-        const data = config.url === '/api/activation_cards' ? { list: cards } : { id: 1, usdt_balance: '0' }
+        if (config.url === '/api/activation_cards') await cardGate?.promise
+        const data = config.url === '/api/activation_cards' ? { list: cardList } : { id: 1, usdt_balance: '0' }
         return { data, status: 200, statusText: 'OK', headers: {}, config }
     }
     message.success = (text) => feedback.push(text)
@@ -67,19 +69,49 @@ test('the real purchase page computes exact totals and submits only after confir
         await act(async () => click(view.container.querySelector('.purchase-card-page__plus')))
         await act(async () => click(view.container.querySelector('.purchase-card-page__plus')))
         assert.equal(view.container.querySelector('#purchase-card-quantity').value, '3')
-        assert.equal(view.container.querySelector('[aria-live="polite"]').textContent, '0.3 USDT')
+        assert.equal(view.container.querySelector('[aria-live="polite"]').textContent, '30 USDT')
         assert.equal(view.calls.length, 0)
         await act(async () => click(view.container.querySelector('[type="submit"]')))
         assert.equal(view.calls.length, 0)
         const confirm = document.querySelector('.confirm-popup button[type="button"]:not(.popup-content__close)')
         await act(async () => { click(confirm); click(confirm) })
         assert.equal(view.calls.length, 1)
-        assert.deepEqual(view.calls[0].slice(0, 3), [17, 3, '0.3'])
+        assert.deepEqual(view.calls[0].slice(0, 3), [17, 3, '30'])
         assert.ok(view.calls[0][3] instanceof AbortSignal)
         assert.equal(confirm.disabled, true)
         await act(async () => { view.work.resolve(); await view.work.promise })
         assert.deepEqual(view.requests, ['/api/activation_cards', '/api/users/my', '/api/activation_cards', '/api/users/my'])
         assert.ok(view.feedback.includes('购买成功'))
+    } finally { await view.dispose() }
+})
+
+test('the three configured cards remain visible while loading and after card loading fails', async () => {
+    const cardGate = deferred()
+    const view = await setup({ cardGate })
+    try {
+        const options = view.container.querySelectorAll('.purchase-card-page__option')
+        assert.equal(options.length, 3)
+        assert.deepEqual([...options].map((option) => option.querySelector('.purchase-card-page__name').textContent), ['10＄激活卡', '20＄激活卡', '30＄激活卡'])
+        assert.deepEqual([...options].map((option) => option.querySelector('.purchase-card-page__price').textContent), ['--', '--', '--'])
+        assert.equal(view.container.querySelector('[aria-live="polite"]').textContent, '-- USDT')
+        assert.equal(view.container.querySelector('[type="submit"]').disabled, true)
+        await act(async () => { cardGate.reject(new Error('Card request failed')); await cardGate.promise.catch(() => {}) })
+        assert.equal(view.container.querySelectorAll('.purchase-card-page__option').length, 3)
+        assert.deepEqual([...view.container.querySelectorAll('.purchase-card-page__option')].map((option) => option.querySelector('.purchase-card-page__price').textContent), ['--', '--', '--'])
+        assert.equal(view.container.querySelector('[type="submit"]').disabled, true)
+        assert.equal(view.container.textContent.includes('加载失败'), false)
+    } finally { await view.dispose() }
+})
+
+test('a card missing from the API stays visible but cannot be purchased', async () => {
+    const view = await setup({ cardList: cards.slice(1) })
+    try {
+        assert.equal(view.container.querySelectorAll('.purchase-card-page__option').length, 3)
+        assert.equal(view.container.querySelector('.purchase-card-page__price').textContent, '--')
+        assert.equal(view.container.querySelector('[type="submit"]').disabled, true)
+        await act(async () => view.container.querySelectorAll('[type="radio"]')[1].click())
+        assert.equal(view.container.querySelectorAll('.purchase-card-page__price')[1].textContent, '20 USDT')
+        assert.equal(view.container.querySelector('[type="submit"]').disabled, false)
     } finally { await view.dispose() }
 })
 

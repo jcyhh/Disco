@@ -5,10 +5,12 @@
         min-width: 0;
         padding: 0;
         border: 0;
+        align-items: stretch;
     }
 
     &__option {
         position: relative;
+        min-width: 0;
         cursor: pointer;
     }
 
@@ -26,27 +28,22 @@
 
     &__card {
         position: relative;
-        grid-template-columns: 166px minmax(0, 1fr);
-        min-height: 206px;
-        padding: 20px;
-        border-radius: 20px;
-        background: var(--app-card-bg);
-        overflow: hidden;
-    }
+        min-height: 300px;
 
-    &__decoration {
-        position: absolute;
-        top: 0;
-        right: 20px;
-        width: 161px;
-        height: 180px;
-        pointer-events: none;
+        &::before {
+            position: absolute;
+            inset: 20px 0 20px;
+            border-radius: 20px;
+            background: var(--app-card-bg);
+            content: '';
+        }
     }
 
     &__art {
         position: relative;
-        width: 166px;
-        height: 166px;
+        flex: none;
+        width: 160px;
+        height: 160px;
         border-radius: 20px;
         object-fit: cover;
     }
@@ -54,13 +51,20 @@
     &__info {
         position: relative;
         min-width: 0;
+        width: 100%;
+    }
+
+    &__name {
+        max-width: 100%;
         overflow-wrap: anywhere;
     }
 
     &__indicator {
-        position: absolute;
-        top: 30px;
-        right: 30px;
+        position: relative;
+        flex: none;
+        width: 40px;
+        height: 40px;
+        margin-top: auto;
     }
 
     &__muted {
