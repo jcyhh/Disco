@@ -50,7 +50,7 @@ const QUICK_LINKS = [
 const TOKEN_OVERVIEW = [
     { title: '总发行量', value: '10亿枚', image: totalSupplyIconUrl },
     { title: '初始底池', value: '10,000', image: initialPoolIconUrl },
-    { title: '初始价格', value: '0.001', image: initialPriceIconUrl },
+    { title: '初始价格', value: '0.0005', image: initialPriceIconUrl },
     { title: '流通比例', value: '1%', image: circulationIconUrl },
 ] as const
 
