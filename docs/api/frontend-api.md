@@ -63,6 +63,11 @@ Authorization: Bearer {token}
   "team_count": 0,
   "kpi": "0",
   "team_kpi": "0",
+  "team_cards": [
+    { "id": 1, "name": "10USDT激活卡", "num": 0, "holder_count": 0 },
+    { "id": 2, "name": "20USDT激活卡", "num": 0, "holder_count": 0 },
+    { "id": 3, "name": "30USDT激活卡", "num": 0, "holder_count": 0 }
+  ],
   "referral_code": "邀请码",
   "referral_count": 0,
   "valid_referral_count": 0,
@@ -71,6 +76,8 @@ Authorization: Bearer {token}
 ```
 
 `valid_referral_count` 是直推里下过预约单、且订单不是待支付或已过期的人数。
+
+`team_cards` 按每种上架激活卡返回团队持有统计，不包含本人。每项的 `id`、`name` 是激活卡 ID 和名称，`num` 是团队持有该卡的总张数，`holder_count` 是团队持有该卡的人数。即使没有团队成员持有，该卡仍会返回，`num` 和 `holder_count` 均为 `0`。这些数值直接使用后端汇总，不使用个人持卡数量或分页直推列表计算。
 
 ### 修改资料
 

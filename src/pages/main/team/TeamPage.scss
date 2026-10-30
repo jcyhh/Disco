@@ -121,6 +121,27 @@
         color: var(--app-content-muted-color);
     }
 
+    &__activation-card {
+        padding: 20px 30px;
+        box-shadow: var(--app-content-shadow);
+    }
+
+    &__activation-card-image {
+        border-radius: 12px;
+        object-fit: cover;
+    }
+
+    &__activation-card-info,
+    &__activation-card-metric {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    &__activation-card-metric,
+    &__activation-card-count {
+        align-items: baseline;
+    }
+
     &__member {
         min-height: 222px;
         box-shadow: var(--app-content-shadow);
@@ -157,7 +178,8 @@
         overflow-wrap: anywhere;
     }
 
-    &__member-value {
+    &__member-value,
+    &__activation-card-total {
         color: var(--app-content-highlight-color);
     }
 }

@@ -1,3 +1,10 @@
+export interface TeamActivationCard {
+    id: number
+    name: string
+    num: number
+    holder_count: number
+}
+
 /**
  * User fields that are already confirmed for the template.
  * 当前项目已确认会用到的用户字段。
@@ -12,9 +19,10 @@ export interface UserProfile {
     referral_count: number
     valid_referral_count: number
     usdt_balance: string
+    team_cards: TeamActivationCard[]
 }
 
-export interface ReferralUser extends Omit<UserProfile, 'valid_referral_count' | 'usdt_balance'> {
+export interface ReferralUser extends Omit<UserProfile, 'valid_referral_count' | 'usdt_balance' | 'team_cards'> {
     created_at: string
 }
 
