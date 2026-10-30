@@ -11,14 +11,14 @@
 | `VITE_DISCO` | `0xE04a52aFc0BF7d0a5771934aa1049bb424555A9D` |
 | `VITE_DISCO_PROJECT` | `0x0E6C84109637631F5c60996f6f5463A09222A469` |
 
-生产部署使用开发者提供的 [bsc.json](bsc.json)，链 ID 为 56，ABI 与本地部署一致。`.env.production` 配置如下：
+生产部署使用开发者于 2026-10-29 提供的最新 [bsc.json](bsc.json)（原文件 `bsc (1).json`），链 ID 为 56，ABI 与本地部署一致。`.env.production` 配置如下：
 
 | 变量 | 值 |
 | --- | --- |
 | `VITE_CONTRACT_CHAIN_ID` | `56` |
 | `VITE_USDT` | `0x55d398326f99059fF775485246999027B3197955` |
-| `VITE_DISCO` | `0x6Af9BDb2967517f90a9a9e3259D1F5F0cD278a0c` |
-| `VITE_DISCO_PROJECT` | `0xDFe69eb1407B3d93ca5d5A2E024F2B398e5E9533` |
+| `VITE_DISCO` | `0xF8474abdD9Cb7Be8d0493427ED7F0Caf19B3ACf7` |
+| `VITE_DISCO_PROJECT` | `0x8b7f1E31040220827B1c02c53a248b856a7003E6` |
 
 USDT 地址由 BSC 正式项目合约的公共 `usdt()` 读取确认，`disco()` 返回值与部署文件一致。生产 `VITE_BASE_URL`、`VITE_RPC_URL` 继续为空，接口使用同源 `/api/...`，RPC 使用 BSC 链预设。开发环境配置不变。
 

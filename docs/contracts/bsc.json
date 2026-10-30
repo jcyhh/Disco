@@ -7,7 +7,7 @@
   "contracts": [
     {
       "name": "DiscoToken",
-      "address": "0x6Af9BDb2967517f90a9a9e3259D1F5F0cD278a0c",
+      "address": "0xF8474abdD9Cb7Be8d0493427ED7F0Caf19B3ACf7",
       "abi": [
         {
           "inputs": [
@@ -555,7 +555,7 @@
     },
     {
       "name": "DiscoProject",
-      "address": "0xDFe69eb1407B3d93ca5d5A2E024F2B398e5E9533",
+      "address": "0x8b7f1E31040220827B1c02c53a248b856a7003E6",
       "abi": [
         {
           "inputs": [

@@ -54,7 +54,7 @@
 - `.env.development`：`VITE_STATIC_PAGE_MODE = 0`，`VITE_BASE_URL = http://192.168.110.11:9520`。
 - 登录恢复真实钱包签名及 Token 鉴权；不再固定已登录。开发登录签署 `Login-{timestamp}`，接口为 `/api/auth/login`，邀请码字段为 `ref`。
 - `.env.development` 已配置本地 RPC、USDT、DISCO、DiscoProject 地址和部署链 ID；每次写链先检查部署与钱包网络。
-- `.env.production` 已按 `docs/contracts/bsc.json` 配置 BSC（56）正式项目和 DISCO 地址；USDT 由正式项目合约公共 `usdt()` 读取确认。`VITE_BASE_URL`、`VITE_RPC_URL` 保持为空，生产接口使用当前站点同源 `/api/...`。
+- `.env.production` 已按开发者 2026-10-29 提供的 `bsc (1).json` 更新 BSC（56）正式项目和 DISCO 地址，原文件同步保存到 `docs/contracts/bsc.json`；ABI 与现有版本一致。已通过公共 RPC 读取新项目的 `usdt()`、`disco()` 并核对一致。`VITE_BASE_URL`、`VITE_RPC_URL` 保持为空，生产接口使用当前站点同源 `/api/...`。
 
 ## Latest home design / 当前首页设计
 
@@ -80,6 +80,8 @@
 Header、从左侧弹出的侧栏、七项菜单顺序及图标、品牌、多语言开关、亮色主题和主按钮皮肤均保留。资产接口只提供 USDT，因此资产单位和图标按真实币种展示；不是改公共主题或图标入口。
 
 ## Verification / 验证分工
+
+2026-10-29：最新正式配置已完成 `pnpm build`，prebuild 的 lint、306 项测试及品牌检查通过，TypeScript 与 Vite 构建通过。产物在 `dist/`；已核对包含新正式地址、不含旧正式地址及开发 API/RPC 地址，资源部署前缀保持 `/h5/`。开发环境配置未修改。
 
 开发者负责接口、业务和页面测试。此前联调仅做 TypeScript 及相关源码/样式静态检查，不宣称接口实测通过。本轮开发者明确要求正式配置与生产打包，`pnpm build` 已通过，包含 prebuild 的 lint、全量测试及品牌检查，随后通过 TypeScript 与 Vite 构建；产物在 `dist/`，生产合约地址、无局域网接口/RPC 地址及 `/h5/` 资源前缀已核对。不进行真实钱包交易或浏览器验收。
 
