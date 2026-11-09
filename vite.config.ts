@@ -95,6 +95,8 @@ export default defineConfig(({ mode }) => {
             },
         },
         build: {
+            // Chromium 79 WebViews need optional chaining and nullish coalescing transpiled.
+            target: ['chrome79', 'edge111', 'firefox114', 'safari16.4', 'ios16.4'],
             cssMinify: 'esbuild',
         },
         css: {

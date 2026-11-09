@@ -22,6 +22,7 @@ import { useApiMutation } from '@/hooks/useApiMutation.ts'
 import { getWalletAddress } from '@/services/storage/common.ts'
 import { signDappMessage } from '@/services/dapp'
 import { Popup } from '@/components/Popup'
+import { assertNotAborted } from '@/shared/async/assertNotAborted.ts'
 
 import { validateActivationCardGift, type ActivationCardGiftValidationError } from './gift.ts'
 
@@ -87,7 +88,7 @@ export function ActivationCardPage() {
             const account = getWalletAddress() as Address
             const session = getAuthSessionVersion()
             function assertCurrent() {
-                signal.throwIfAborted()
+                assertNotAborted(signal)
                 if (!account || session !== getAuthSessionVersion() || account.toLowerCase() !== getWalletAddress().toLowerCase()) {
                     throw new Error(t('钱包账号已变更，请重新登录'))
                 }
