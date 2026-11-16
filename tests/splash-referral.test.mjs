@@ -58,7 +58,7 @@ test('splash page translates welcome copy and reuses the shared loading icon', a
     assert.match(source, /<Icon[\s\S]*name="loading"/)
     assert.match(source, /name="loading"[\s\S]*className="size-\d+"/)
     assert.match(source, /loading \? \(/)
-    assert.match(source, /AUTH_STARTUP_RESULT\.walletRequired/)
+    assert.match(source, /AUTH_STARTUP_STAGE\.walletDetection/)
     assert.match(source, /animate__zoomIn/)
     assert.match(source, /animate__slideInUp/)
 })

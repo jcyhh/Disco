@@ -19,12 +19,14 @@ export function requestPasswordLogin(
 
 export function requestDappLogin(
     params: DappLoginParams,
+    signal?: AbortSignal,
 ): Promise<AuthTokenResponse> {
     return request<AuthTokenResponse, Omit<DappLoginParams, 'referralCode'> & {
         ref: string
     }>({
         url: AUTH_API_PATH.dappLogin,
         method: 'POST',
+        signal,
         data: {
             ref: params.referralCode,
             address: params.address,

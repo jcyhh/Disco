@@ -68,15 +68,19 @@ export async function initializeDappWallet(
     options: DappInitializeWalletOptions = {},
 ): Promise<boolean> {
     const hasProvider = await detectDappWallet()
+    options.assertCurrent?.()
 
     if (!hasProvider) return false
 
     const chainId = await getDappChainId()
+    options.assertCurrent?.()
     useDappStore.getState().setChainId(chainId)
 
     await ensureDappChain(DAPP_CURRENT_CHAIN, {
         skipInDevelopment: options.skipChainInDevelopment,
+        assertCurrent: options.assertCurrent,
     })
+    options.assertCurrent?.()
 
     if (options.skipChainInDevelopment === false || import.meta.env?.PROD) {
         useDappStore.getState().setChainId(DAPP_CURRENT_CHAIN.id)
@@ -89,21 +93,32 @@ export async function initializeDappWallet(
     return true
 }
 
-export async function getConnectedDappAddress(): Promise<Address> {
+export async function getConnectedDappAddress(assertCurrent?: () => void): Promise<Address> {
     const walletClient = getDappWalletClient()
     const [address] = await walletClient.getAddresses()
+    assertCurrent?.()
 
     if (address) return address
 
     const [requestedAddress] = await walletClient.requestAddresses()
-    return normalizeAddress(requestedAddress)
+    assertCurrent?.()
+    if (requestedAddress) return requestedAddress
+
+    // Some wallets confirm authorization before returning an address in eth_accounts.
+    const [authorizedAddress] = await walletClient.getAddresses()
+    assertCurrent?.()
+    return normalizeAddress(authorizedAddress)
 }
 
 export async function connectDappWallet(options: {
     assertCurrent?: () => void
+    useInitializedChain?: boolean
 } = {}): Promise<DappWalletConnection> {
-    const address = await getConnectedDappAddress()
-    const chainId = await getDappChainId()
+    const address = await getConnectedDappAddress(options.assertCurrent)
+    options.assertCurrent?.()
+    const chainId = options.useInitializedChain
+        ? useDappStore.getState().chainId
+        : await getDappChainId()
     options.assertCurrent?.()
 
     useDappStore.getState().setProviderStatus(DAPP_PROVIDER_STATUS.available)
@@ -125,7 +140,7 @@ export async function signDappMessage(
     options: { account?: Address; assertCurrent?: () => void } = {},
 ): Promise<DappSignResult> {
     const walletClient = getDappWalletClient()
-    const address = await getConnectedDappAddress()
+    const address = await getConnectedDappAddress(options.assertCurrent)
     options.assertCurrent?.()
     if (options.account && options.account.toLowerCase() !== address.toLowerCase()) {
         throw new Error(translateDappErrorMessage(DAPP_ERROR_MESSAGE.walletAddressUnavailable))

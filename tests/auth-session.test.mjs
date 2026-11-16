@@ -174,7 +174,7 @@ test('splash opening animation gates every auth startup path', async () => {
     assert.match(splashSource, /import \{ waitForSplashAnimation \} from '\.\/animation\.ts'/)
     assert.match(
         splashSource,
-        /async function startSplashAuthFlow\(\): Promise<void> \{[\s\S]*await waitForSplashAnimation\(\)[\s\S]*const result = await startAuthFlow\(\)/,
+        /async function startSplashAuthFlow\(\): Promise<void> \{[\s\S]*await waitForSplashAnimation\(\)[\s\S]*const result = await startAuthFlow\(controller\.signal\)/,
     )
     assert.doesNotMatch(
         splashSource,
@@ -220,14 +220,14 @@ test('DApp startup retries wallet login immediately when a stored token belongs 
         readFile(new URL('../src/features/auth/dapp.ts', import.meta.url), 'utf8'),
     ])
 
-    assert.match(startupSource, /async function restartDappLoginAfterStoredSessionChange\(\): Promise<void>/)
+    assert.match(startupSource, /async function restartDappLoginAfterStoredSessionChange\(/)
     assert.match(
         startupSource,
-        /restartDappLoginAfterStoredSessionChange[\s\S]*clearAuthSession\(\)[\s\S]*await loginWithDapp\(\)/,
+        /restartDappLoginAfterStoredSessionChange[\s\S]*clearAuthSession\(\)[\s\S]*await loginWithDapp\(signal, reportStage\)/,
     )
     assert.match(
         startupSource,
-        /try \{[\s\S]*await startDappAuthFlow\(token\)[\s\S]*\} catch \{[\s\S]*if \(token\) \{[\s\S]*await restartDappLoginAfterStoredSessionChange\(\)[\s\S]*\}/,
+        /try \{[\s\S]*await startDappAuthFlow\(token, signal, reportStage\)[\s\S]*\} catch \(error\) \{[\s\S]*if \(token\) \{[\s\S]*await restartDappLoginAfterStoredSessionChange\(signal, reportStage\)[\s\S]*\}/,
     )
     assert.match(startupSource, /clearAuthSession/)
     assert.match(dappSource, /export function resetDappLoginAttempt\(\): void/)

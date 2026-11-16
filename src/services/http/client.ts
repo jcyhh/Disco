@@ -70,7 +70,7 @@ httpClient.interceptors.response.use(
             && snapshot.token === getToken()
         const isUnauthorized = httpError.status === HTTP_STATUS.unauthorized
 
-        if (isUnauthorized && belongsToCurrentSession) {
+        if (isUnauthorized && snapshot?.token && belongsToCurrentSession) {
             logout()
         }
 

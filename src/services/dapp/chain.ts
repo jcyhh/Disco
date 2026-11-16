@@ -76,6 +76,7 @@ export async function ensureDappChain(
     }
 
     const currentChainId = await getDappChainId()
+    options.assertCurrent?.()
 
     if (currentChainId === chain.id) {
         return true
@@ -85,8 +86,10 @@ export async function ensureDappChain(
         await switchDappChain(chain)
         return true
     } catch (error) {
+        options.assertCurrent?.()
         if (getProviderErrorCode(error) !== 4902) throw error
         await addDappChain(chain)
+        options.assertCurrent?.()
         await switchDappChain(chain)
         return true
     }

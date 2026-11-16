@@ -26,11 +26,13 @@ export interface DappSignResult {
 
 export interface DappEnsureChainOptions {
     skipInDevelopment?: boolean
+    assertCurrent?: () => void
 }
 
 export interface DappInitializeWalletOptions {
     skipChainInDevelopment?: boolean
     attachListeners?: boolean
+    assertCurrent?: () => void
 }
 
 export interface DappWalletListenerOptions {
