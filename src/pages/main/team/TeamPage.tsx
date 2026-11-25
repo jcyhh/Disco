@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import sectionStarUrl from '@/assets/common/section-star.png'
 import copyIconUrl from '@/assets/team/copy.webp'
+import dailyTeamPerformanceIconUrl from '@/assets/team/daily-team-performance.webp'
 import directCountIconUrl from '@/assets/team/direct-count.webp'
 import effectiveDirectIconUrl from '@/assets/team/effective-direct.webp'
 import heroBannerUrl from '@/assets/team/hero-banner.webp'
@@ -155,6 +156,17 @@ export function TeamPage() {
                     </dl>
                 </div>
             </div>
+
+            <dl className="team-page__daily-performance app-card flex flex-wrap items-center column-gap-28 row-gap-8 mt-15" data-reveal="rise">
+                <dt className="team-page__daily-performance-label flex items-center column-gap-16 tl size-28 bold-6 lh-36">
+                    <img src={dailyTeamPerformanceIconUrl} className="img-80 flex-none" alt="" />
+                    <span>{t('今日团队新增业绩')}</span>
+                </dt>
+                <dd className="team-page__daily-performance-amount flex-none tr word-nowrap">
+                    <strong className="app-color size-36 bold-7 lh-44">{formatTeamPerformance(user.data?.team_new_kpi)}</strong>
+                    <p className="team-page__muted size-20 lh-28">USDT</p>
+                </dd>
+            </dl>
 
             <section className="mt-30" aria-labelledby="team-activation-cards-title">
                 <h2 id="team-activation-cards-title" className="flex items-center gap-4 size-32 bold-6 lh-44">

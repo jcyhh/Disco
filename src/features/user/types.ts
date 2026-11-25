@@ -15,6 +15,7 @@ export interface UserProfile {
     team_count: number
     kpi: string
     team_kpi: string
+    team_new_kpi?: string | null
     referral_code: string
     referral_count: number
     valid_referral_count: number
@@ -22,7 +23,7 @@ export interface UserProfile {
     team_cards: TeamActivationCard[]
 }
 
-export interface ReferralUser extends Omit<UserProfile, 'valid_referral_count' | 'usdt_balance' | 'team_cards'> {
+export interface ReferralUser extends Omit<UserProfile, 'valid_referral_count' | 'usdt_balance' | 'team_cards' | 'team_new_kpi'> {
     created_at: string
 }
 
